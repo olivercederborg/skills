@@ -1,0 +1,6 @@
+interface:
+  display_name: "Grounding"
+  short_description: "Verify technical claims before decisions"
+  default_prompt: "Use $grounding on this technical target."
+policy:
+  allow_implicit_invocation: false
