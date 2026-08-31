@@ -9,5 +9,5 @@ Reusable coding-agent skills.
 ## Install
 
 ```sh
-npx skills add olivercederborg/skills --skill grounding
+npx skills@latest add olivercederborg/skills
 ```
