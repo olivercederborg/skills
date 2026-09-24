@@ -7,6 +7,7 @@ Reusable coding-agent skills.
 - [`grounding/`](grounding/): verifies technical claims and decisions against current project evidence and primary sources. Invoke it explicitly with `$grounding`.
 - [`receiving-review/`](receiving-review/): handles review comments on your own PR or stack. It verifies each claim, then fixes, replies, and resolves.
 - [`ready-check/`](ready-check/): tells you whether a branch, PR, or stack is actually done. It checks scope, idiom, standards, slop, tests, verification, and the PR description, gives a done or not-done verdict, and fixes what you approve.
+- [`review-loop/`](review-loop/): has Claude and Codex review a change in parallel, checks their findings against the code, fixes what you approve, and re-reviews until it's clean.
 - [`review-teammate-pr/`](review-teammate-pr/): reviews someone else's PR with you, then posts the comments you approve. It also re-reviews after fixes.
 
 The two review skills share one chat format, built for scanning. Each item is a card
