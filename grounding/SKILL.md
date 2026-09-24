@@ -7,7 +7,7 @@ description: Use when a technical claim or decision needs evidence from current 
 
 Ground one evidence key: target, question, environment, relevant version or live state, governing authority, and source. This skill establishes support; project instructions and specialized convention skills remain the decision authority.
 
-If the key cannot be identified from the request and current context, ask one focused question and stop.
+Identify the claim from the request and available context. Ask only when a missing decision changes the investigation; continue independent evidence gathering.
 
 ## Verify
 
@@ -23,25 +23,19 @@ Comparisons and existence claims may include several targets in one key. State t
 
 Claims that one option is best, safest, or idiomatic must name the project constraints and compare viable alternatives against them.
 
-Inspect only sources needed for the key, with at most one local precedent and one primary external source per target. Stop when the required sources are verified or one decision-relevant uncertainty remains. Use at most one specialist agent for one unresolved question.
+Inspect the sources needed to resolve the claim. Expand the search when evidence conflicts or leaves a material gap; stop when further reading would not change the decision. Delegate a bounded question only when independent expertise would help and delegation is authorized.
 
-## Publish before acting
+## Evidence before confidence
 
-Publish this packet before the first implementation patch or substantive recommendation:
+Support a substantive recommendation with the evidence it depends on. Use concise prose and source links; distinguish verified behavior, inference, and unresolved questions. A fixed packet or pre-patch announcement is unnecessary.
 
-```text
-Grounding
-- Target: <target, question, and environment>
-- Evidence: <governing source; current version or state and exact source; relevant precedent>
-- Evidence supports: <direct evidence or project-specific synthesis>
-- Uncertainty: <none or one decision-relevant question>
-```
+When an implementation recommendation depends on an uncertain API combination or runtime behavior, check a minimal example against the installed version before calling it a working solution. Label an untested sketch as a proposal. Do not turn an unresolved implementation detail into a claim that an architecture is unsuitable.
 
-Implementation can proceed only when no remaining uncertainty could change the selected API, pattern, or behavior.
+Use reversible local experiments to resolve technical uncertainty within the authorized scope. Pause dependent work when the remaining ambiguity affects user intent, security, external effects, or a consequential contract. Continue independent work and state what evidence or decision is missing.
 
 ## Reuse
 
-If the current packet covers the evidence key, reuse it silently. Do not repeat evidence checks or publish another full packet. Explanation, accepted implementation, comment drafting, and final review do not change the key.
+Reuse verified evidence while the target, version, governing constraints and relevant state remain unchanged. Explanation, accepted implementation, comment drafting and final review alone do not require another check. Recheck only what new code, state or conflicting evidence invalidates.
 
 When only the conclusion or uncertainty changes, state the change and remaining uncertainty in one line.
 
