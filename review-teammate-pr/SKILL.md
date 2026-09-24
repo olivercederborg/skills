@@ -16,42 +16,56 @@ When the user only wants comments drafted in this style, go straight to
 Before showing any finding or suggested fix, ground it by following
 [grounding](references/grounding.md).
 
+<!-- toolkit-format:start (synced from shared/format.md by scripts/sync-format.sh; edit there) -->
 ## Chat format
 
-The user thinks visually and scans. They understand a problem through its flow and
-the shape of the code.
+The user thinks visually and scans. They understand a problem through its flow and the
+shape of the code.
 
-**Card.** Each finding is a card, in this order:
+**Cards.** Each item that needs a look is a card, in this order:
 
-1. `### 1/3 · <kind>: <subject>`, where the kind is Bug, Suggestion, or Question.
-2. A linked `path:line`, plus the spec when relevant.
-3. Status, in at most eight words: `✅ Confirmed: <how>` or `⚠️ Unconfirmed: <what's missing>`.
-4. `🔎 Grounded: <sources checked>`, plus `⚠️ Not grounded: <what>` for a gap.
-5. A picture, when the code alone doesn't make the flow clear: a text call tree,
-   failure sequence, or case table.
-6. The PR's code with the suggested change as a `diff`, with enough context to place
-   it in the flow. That means the whole function when it's small, or one block per
-   file in call order, each headed by its path.
-7. At most two one-line bullets for evidence gaps or tradeoffs.
+1. **Heading**: `### 2/5 · <kind>: <subject>`. The progress count shows what's left,
+   and each skill defines its own kinds.
+2. **Location**: who raised it (their login), and a linked `path:line`.
+3. **Evidence lines**, a few words each:
+   - `✅ Verified: <how>`, or `❌ Doesn't hold: <why>`
+   - `🔎 Sources: <what was checked>`
+   - `⚠️ Unverified: <gap>`, only when a gap remains
+4. **A picture**, when the code alone doesn't make the flow clear: a text call tree, a
+   failure sequence, a state flow, or a case table.
+5. **The change** as a `diff`, with enough context to place it in the flow. That means
+   the whole function when it's small, or one block per file in call order, each headed
+   by its path.
+6. **At most two one-line bullets** for risks or assumptions.
+
+**Severity** for code findings:
+
+- **Blocker**: wrong behavior, missing scope, a failing check, or a broken rule.
+- **Should**: slop, scope creep, or a non-idiomatic pattern with a clear better form.
+- **Optional**: a real improvement that can wait.
 
 **Turns.**
 
-- Start with content: the list, a card, or the result.
-- Show each piece of code and `FYI:` once per session. A revised draft shows only what
-  changed.
-- Report what the user must look at or decide.
-- Bullets are one line: `thing → consequence`.
-- Put side information, such as CI noise, on one `FYI:` line at the end.
-- End every turn with one bold `**Next:**` line of at most four short options. It is
-  the turn's only question.
+- **Start with content**: the verdict, a table, a card, or the result.
+- **Once per session**: show each piece of code, warning, and `FYI:` only once. List
+  tests as one-line cases: `file: scenario → expected ✅`.
+- **Only what needs the user**: report what they must look at or decide.
+- **One-line bullets.**
+- **Tables**: at most four columns, with a few words per cell.
+- **Side information**, such as CI noise, goes on one `FYI:` line at the end.
+- **End on `Next:`**: finish every turn with one bold `**Next:**` line of at most four
+  short options. It is the turn's only question.
+<!-- toolkit-format:end -->
+
+Card kinds here: **Bug**, **Suggestion**, **Question**.
 
 ## Example finding card
 
 ````markdown
 ### 1/2 · Bug: export reads other companies' transactions
 [`exports/handler.ts:18`](link) · spec: EX-12
-✅ Confirmed: traced handler to query
-🔎 Grounded: `CurrentCompany` scoping in `transactions.repository.ts` · ⚠️ Not grounded: admin-only route?
+✅ Verified: traced handler to query
+🔎 Sources: `CurrentCompany` scoping in `transactions.repository.ts` · ⚠️ Unverified: admin-only route?
 
 ```text
 GET /exports → exportHandler → transactions.findMany({ bookedAt })   ← no companyId
@@ -106,8 +120,7 @@ findings yourself before keeping it.
 Keep findings with a concrete consequence. Count every dropped one with its reason:
 nits, speculative failures, points others already raised, and broad refactors.
 
-**Done when:** every changed path is traced, and every kept finding has a status line
-and a grounding line.
+**Done when:** every changed path is traced, and every kept finding has its evidence lines.
 
 ## 3. Discuss findings
 

@@ -10,6 +10,49 @@ Two independent reviewers look at the same change. The main agent is the coordin
 it verifies, merges, reports, and fixes, but it is not a third reviewer. A round ends in
 **Clean** or a list of verified findings. Rounds repeat until the change is clean.
 
+<!-- toolkit-format:start (synced from shared/format.md by scripts/sync-format.sh; edit there) -->
+## Chat format
+
+The user thinks visually and scans. They understand a problem through its flow and the
+shape of the code.
+
+**Cards.** Each item that needs a look is a card, in this order:
+
+1. **Heading**: `### 2/5 · <kind>: <subject>`. The progress count shows what's left,
+   and each skill defines its own kinds.
+2. **Location**: who raised it (their login), and a linked `path:line`.
+3. **Evidence lines**, a few words each:
+   - `✅ Verified: <how>`, or `❌ Doesn't hold: <why>`
+   - `🔎 Sources: <what was checked>`
+   - `⚠️ Unverified: <gap>`, only when a gap remains
+4. **A picture**, when the code alone doesn't make the flow clear: a text call tree, a
+   failure sequence, a state flow, or a case table.
+5. **The change** as a `diff`, with enough context to place it in the flow. That means
+   the whole function when it's small, or one block per file in call order, each headed
+   by its path.
+6. **At most two one-line bullets** for risks or assumptions.
+
+**Severity** for code findings:
+
+- **Blocker**: wrong behavior, missing scope, a failing check, or a broken rule.
+- **Should**: slop, scope creep, or a non-idiomatic pattern with a clear better form.
+- **Optional**: a real improvement that can wait.
+
+**Turns.**
+
+- **Start with content**: the verdict, a table, a card, or the result.
+- **Once per session**: show each piece of code, warning, and `FYI:` only once. List
+  tests as one-line cases: `file: scenario → expected ✅`.
+- **Only what needs the user**: report what they must look at or decide.
+- **One-line bullets.**
+- **Tables**: at most four columns, with a few words per cell.
+- **Side information**, such as CI noise, goes on one `FYI:` line at the end.
+- **End on `Next:`**: finish every turn with one bold `**Next:**` line of at most four
+  short options. It is the turn's only question.
+<!-- toolkit-format:end -->
+
+Card kinds here: **Blocker**, **Should**, **Optional**.
+
 ## Reviewers
 
 | Reviewer | Model | Effort |
@@ -83,26 +126,29 @@ Give a complete, independent review. If there are no findings, say so.
 ## 3. Review, verify, merge
 
 1. **Run both reviewers in parallel.**
-2. **Verify each finding** against the code before showing it. Reviewers sometimes make
-   false claims. Drop a finding that doesn't hold, and note the drop in one line.
-3. **Merge.** Group findings by root cause, note who raised each one (Claude, Codex, or
+2. **Verify each finding** against the code before showing it, following
+   [grounding](references/grounding.md). Reviewers sometimes make false claims. Drop a
+   finding that doesn't hold, and note the drop in one line.
+3. **Map severity.** Reviewer P0 and P1 become **Blocker**, P2 becomes **Should**, and P3
+   becomes **Optional**.
+4. **Merge.** Group findings by root cause, note who raised each one (Claude, Codex, or
    both), and show severity disagreements as they are.
 
 ## 4. Report
 
 ````markdown
-**Round 1: 1 P1, 2 P2.** Claude 2 · Codex 2 · both agree on 1.
+**Round 1: 1 blocker, 2 should.** Claude 2 · Codex 2 · both agree on 1.
 
 | # | Where | Finding | Sev · who |
 |---|-------|---------|-----------|
-| 1 | `retry.ts:40` | Retry double-charges | P1 · both |
-| 2 | `retry.ts:12` | Backoff never caps | P2 · Codex |
-| 3 | `retry.test.ts` | No test for the timeout path | P2 · Claude |
+| 1 | `retry.ts:40` | Retry double-charges | Blocker · both |
+| 2 | `retry.ts:12` | Backoff never caps | Should · Codex |
+| 3 | `retry.test.ts` | No test for the timeout path | Should · Claude |
 
-### 1/3 · P1: retry double-charges
+### 1/3 · Blocker: retry double-charges
 [`src/retry.ts:40`](link)
-✅ Confirmed: traced `charge` → `retry` → `charge`
-🔎 Grounded: provider docs on idempotency keys
+✅ Verified: traced `charge` → `retry` → `charge`
+🔎 Sources: provider docs on idempotency keys
 
 ```diff
 -  await provider.charge(amount)
@@ -111,14 +157,12 @@ Give a complete, independent review. If there are no findings, say so.
 
 Dropped 1: Codex's "unhandled rejection" at `queue.ts:8` is caught at line 12.
 
-**Next:** fix all · fix P0–P2 · discuss N · stop
+**Next:** fix all · fix blockers · discuss N · stop
 ````
 
 - **Verdict first.** Write **Clean**, or the round number and the counts by severity.
-- **Table**: four columns, with a few words per cell. The details go in the cards.
-- **Cards** for P0 and P1 findings, and for any fix that changes the flow or design.
-  Each card has a status line, a grounding line, and the fix as a `diff`.
-- **The `Next:` line** is the turn's only question.
+  A clean round ends with `**Next:** ready-check · open PR`.
+- **Cards** for blockers, and for any fix that changes the flow or design.
 
 ## 5. Fix and re-review
 
@@ -129,7 +173,7 @@ When the user approves fixes:
    lists the previous findings and their fixes.
 3. Report only what is new or still open.
 
-Stop when a round comes back with no actionable P0–P2 findings (**Clean**), or after
+Stop when a round comes back with no blockers or should findings (**Clean**), or after
 three rounds, or when the user stops. After three rounds, list what's still open and
 let the user decide. Commit and push only when the user asks.
 

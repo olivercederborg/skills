@@ -1,1 +1,1 @@
-../../shared/pr-review/grounding.md
+../../grounding/SKILL.md

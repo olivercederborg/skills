@@ -1,1 +1,1 @@
-../../shared/pr-review/disclosure.md
+../../shared/disclosure.md

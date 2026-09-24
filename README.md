@@ -1,25 +1,53 @@
 # Skills
 
-Reusable coding-agent skills.
+A small toolkit of coding-agent skills for planning, checking, and reviewing code. The
+skills work in Claude Code and Codex, and share one chat format that is built for
+scanning.
 
-## Included skills
+## Workflow
 
-- [`grounding/`](grounding/): verifies technical claims and decisions against current project evidence and primary sources. Invoke it explicitly with `$grounding`.
-- [`receiving-review/`](receiving-review/): handles review comments on your own PR or stack. It verifies each claim, then fixes, replies, and resolves.
-- [`scope-grill/`](scope-grill/): grills you on a plan by showing what each option changes in the code, labels whether it widens the scope, and defaults to the smallest option that meets the goal. It ends with a "Not in scope" list it can add to a spec, ticket, or PR description.
-- [`ready-check/`](ready-check/): tells you whether a branch, PR, or stack is actually done. It checks scope, idiom, standards, slop, tests, verification, and the PR description, gives a done or not-done verdict, and fixes what you approve.
-- [`review-loop/`](review-loop/): has Claude and Codex review a change in parallel, checks their findings against the code, fixes what you approve, and re-reviews until it's clean.
-- [`review-teammate-pr/`](review-teammate-pr/): reviews someone else's PR with you, then posts the comments you approve. It also re-reviews after fixes.
+```text
+scope-grill       plan: decide by code impact, keep the MVP small, write "Not in scope"
+   build
+ready-check       is it done? scope (incl. Not in scope), idiom, standards, slop, tests
+review-loop       Claude + Codex review → fix → re-review until clean
+   open PR
+receiving-review  handle reviewers' and bots' comments: verify, fix, reply, resolve
 
-The two review skills share one chat format, built for scanning. Each item is a card
-with a one-line summary, a status line and a grounding line, a picture of the flow
-when needed, and the code change in context. Every turn ends with one `Next:`
-question. The reference files they share live in [`shared/pr-review/`](shared/pr-review/)
-and are symlinked into each skill, so each skill installs self-contained. Scenario
-evals live in [`evals/`](evals/), and the review behind this
-design is in [`docs/research/`](docs/research/).
+review-teammate-pr   review someone else's PR and post the comments you approve
+grounding            used by all of the above: check a claim against real evidence
+```
 
-`receiving-review` was inspired by Johan Frølich's original skill of the same name. `scope-grill` adapts the design-tree rounds from Matt Pocock's `grilling` skill ([mattpocock/skills](https://github.com/mattpocock/skills)).
+| Skill | Use when |
+|---|---|
+| [`scope-grill`](scope-grill/) | Planning a change, or scoping an existing spec, ticket, or PR |
+| [`ready-check`](ready-check/) | Asking "is this done?", "is it idiomatic?", or "anything left?" |
+| [`review-loop`](review-loop/) | Asking for a second opinion, or a review by Claude and Codex |
+| [`receiving-review`](receiving-review/) | Handling review comments on your own PR or stack |
+| [`review-teammate-pr`](review-teammate-pr/) | Reviewing a teammate's PR |
+| [`grounding`](grounding/) | Verifying a technical claim, or asking "are you sure?" |
+
+## How they fit together
+
+- **One chat format.** Each skill starts with the verdict. It then shows cards with
+  `✅ Verified` / `🔎 Sources` / `⚠️ Unverified` evidence lines, a picture of the flow
+  when needed, and the code change in context. Every turn ends with one `Next:`
+  question. Code findings use one severity scale: Blocker, Should, Optional.
+- **One source for shared rules.**
+  - The chat format lives in [`shared/format.md`](shared/format.md) and is copied into
+    each skill's `SKILL.md`, so it survives context compaction. Keep the copies in sync
+    with `scripts/sync-format.sh`, and check them with `scripts/sync-format.sh --check`.
+  - Grounding rules come from the `grounding` skill itself.
+  - Shared references (`shared/*.md`, `grounding/SKILL.md`) are symlinked into each
+    skill's `references/`, so a single installed skill still works on its own.
+- **Handoffs.** Each skill's last `Next:` offers the next step in the workflow.
+
+Scenario evals live in [`evals/`](evals/). The review behind this design is in
+[`docs/research/`](docs/research/).
+
+`receiving-review` was inspired by Johan Frølich's original skill of the same name.
+`scope-grill` adapts the design-tree rounds from Matt Pocock's `grilling` skill
+([mattpocock/skills](https://github.com/mattpocock/skills)).
 
 ## Install
 

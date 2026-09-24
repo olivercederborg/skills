@@ -13,37 +13,48 @@ has its reply posted and its thread in the agreed state.
 Before proposing any fix direction or technical decline, ground it by following
 [grounding](references/grounding.md).
 
+<!-- toolkit-format:start (synced from shared/format.md by scripts/sync-format.sh; edit there) -->
 ## Chat format
 
-The user thinks visually and scans. They understand a problem through its flow and
-the shape of the code.
+The user thinks visually and scans. They understand a problem through its flow and the
+shape of the code.
 
-**Card.** Each item that needs a look is a card, in this order:
+**Cards.** Each item that needs a look is a card, in this order:
 
-1. `### 2/5 · <call>: <subject>`, where the call is Fix, Decline, Defer, or No change.
-2. Who raised it, and a linked `path:line`.
-3. Status, in at most eight words: `✅ Confirmed: <how>`, `❌ Doesn't hold: <why>`, or
-   `⚠️ Unconfirmed: <what's missing>`.
-4. `🔎 Grounded: <sources checked>`, plus `⚠️ Not grounded: <what>` for a gap. A
-   trivial fix skips this line.
-5. A picture, when the code alone doesn't make the flow clear: a text call tree,
-   failure sequence, or state flow.
-6. The change as a `diff`, with enough context to place it in the flow. That means the
-   whole function when it's small, or one block per file in call order, each headed by
-   its path.
-7. At most two one-line bullets for risks or assumptions.
+1. **Heading**: `### 2/5 · <kind>: <subject>`. The progress count shows what's left,
+   and each skill defines its own kinds.
+2. **Location**: who raised it (their login), and a linked `path:line`.
+3. **Evidence lines**, a few words each:
+   - `✅ Verified: <how>`, or `❌ Doesn't hold: <why>`
+   - `🔎 Sources: <what was checked>`
+   - `⚠️ Unverified: <gap>`, only when a gap remains
+4. **A picture**, when the code alone doesn't make the flow clear: a text call tree, a
+   failure sequence, a state flow, or a case table.
+5. **The change** as a `diff`, with enough context to place it in the flow. That means
+   the whole function when it's small, or one block per file in call order, each headed
+   by its path.
+6. **At most two one-line bullets** for risks or assumptions.
+
+**Severity** for code findings:
+
+- **Blocker**: wrong behavior, missing scope, a failing check, or a broken rule.
+- **Should**: slop, scope creep, or a non-idiomatic pattern with a clear better form.
+- **Optional**: a real improvement that can wait.
 
 **Turns.**
 
-- Start with content: the table, a card, or the result.
-- Show each piece of code, warning, and `FYI:` once per session. List tests as
-  one-line cases, `file: scenario → expected ✅`.
-- Report what the user must look at or decide.
-- Bullets are one line: `thing → call: reason`.
-- Tables have at most four columns and a few words per cell.
-- Put side information, such as CI noise, on one `FYI:` line at the end.
-- End every turn with one bold `**Next:**` line of at most four short options. It is
-  the turn's only question.
+- **Start with content**: the verdict, a table, a card, or the result.
+- **Once per session**: show each piece of code, warning, and `FYI:` only once. List
+  tests as one-line cases: `file: scenario → expected ✅`.
+- **Only what needs the user**: report what they must look at or decide.
+- **One-line bullets.**
+- **Tables**: at most four columns, with a few words per cell.
+- **Side information**, such as CI noise, goes on one `FYI:` line at the end.
+- **End on `Next:`**: finish every turn with one bold `**Next:**` line of at most four
+  short options. It is the turn's only question.
+<!-- toolkit-format:end -->
+
+Card kinds here: **Fix**, **Decline**, **Defer**, **No change**.
 
 ## Example turns
 
@@ -56,8 +67,8 @@ the shape of the code.
 
 ### 1/3 · Fix: upload retry creates a duplicate receipt
 cubic · [`receipts/upload.ts:31`](link)
-✅ Confirmed: failing test uploads twice
-🔎 Grounded: `upsert` precedent in `payments.repository.ts` · Prisma compound-unique docs
+✅ Verified: failing test uploads twice
+🔎 Sources: `upsert` precedent in `payments.repository.ts` · Prisma compound-unique docs
 
 ```text
 attempt 1: storage.put ✓ → receipts.create ✓ → respond ✗ timeout

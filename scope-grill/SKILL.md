@@ -11,6 +11,49 @@ decision at a time, until an MVP becomes a large, slow, over-built PR. Every que
 here shows whether an option keeps the scope, narrows it, or widens it, and the default
 is always the smallest option that meets the goal.
 
+<!-- toolkit-format:start (synced from shared/format.md by scripts/sync-format.sh; edit there) -->
+## Chat format
+
+The user thinks visually and scans. They understand a problem through its flow and the
+shape of the code.
+
+**Cards.** Each item that needs a look is a card, in this order:
+
+1. **Heading**: `### 2/5 · <kind>: <subject>`. The progress count shows what's left,
+   and each skill defines its own kinds.
+2. **Location**: who raised it (their login), and a linked `path:line`.
+3. **Evidence lines**, a few words each:
+   - `✅ Verified: <how>`, or `❌ Doesn't hold: <why>`
+   - `🔎 Sources: <what was checked>`
+   - `⚠️ Unverified: <gap>`, only when a gap remains
+4. **A picture**, when the code alone doesn't make the flow clear: a text call tree, a
+   failure sequence, a state flow, or a case table.
+5. **The change** as a `diff`, with enough context to place it in the flow. That means
+   the whole function when it's small, or one block per file in call order, each headed
+   by its path.
+6. **At most two one-line bullets** for risks or assumptions.
+
+**Severity** for code findings:
+
+- **Blocker**: wrong behavior, missing scope, a failing check, or a broken rule.
+- **Should**: slop, scope creep, or a non-idiomatic pattern with a clear better form.
+- **Optional**: a real improvement that can wait.
+
+**Turns.**
+
+- **Start with content**: the verdict, a table, a card, or the result.
+- **Once per session**: show each piece of code, warning, and `FYI:` only once. List
+  tests as one-line cases: `file: scenario → expected ✅`.
+- **Only what needs the user**: report what they must look at or decide.
+- **One-line bullets.**
+- **Tables**: at most four columns, with a few words per cell.
+- **Side information**, such as CI noise, goes on one `FYI:` line at the end.
+- **End on `Next:`**: finish every turn with one bold `**Next:**` line of at most four
+  short options. It is the turn's only question.
+<!-- toolkit-format:end -->
+
+Card kinds here: one card per question, and each option is shown as described in step 3.
+
 ## 1. Set the scope line
 
 Before asking anything, read the request, the linked issue, and the code involved. When
@@ -87,15 +130,14 @@ Each question lists its options side by side. For each option show:
 
 **Recommend A:** exports are small enough to filter in memory. **B becomes worth it
 when** an export exceeds ~10k rows.
-🔎 Grounded: `export.ts` precedent · largest export in fixtures is 2k rows
+🔎 Sources: `export.ts` precedent · largest export in fixtures is 2k rows
 
 **Next:** A · B · discuss
 ````
 
 - **Grounded recommendation**: before recommending, ground it by following
   [grounding](references/grounding.md): library docs and source, repo precedent, and
-  the repo's rules. Show `🔎 Grounded: <sources>` under the recommendation, plus
-  `⚠️ Not grounded: <what>` for any gap. Ground a losing option too when its idiom is
+  the repo's rules. Show the evidence lines under the recommendation. Ground a losing option too when its idiom is
   what decides the question.
 - **The recommendation** is the smallest option that meets the must-haves. When a wider
   option wins on merit, say plainly what it adds and why that is worth it now.
@@ -125,7 +167,7 @@ When every question is decided, finish with:
   **Not now**, in the format below.
 - **Size**: the estimated PR count and size.
 
-End with `**Next:** add Not in scope to <spec | ticket | PR> · done`. Offer an ADR only
+End with `**Next:** build · add Not in scope to <spec | ticket | PR> · done`. Offer an ADR only
 when the user wants one.
 
 ## Not in scope

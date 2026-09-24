@@ -1,1 +1,1 @@
-../../shared/pr-review/github.md
+../../shared/github.md

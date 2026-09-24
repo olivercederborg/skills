@@ -10,7 +10,7 @@
       ],
       "assertions": [
         "Turn 1 starts with a table of 3 items with at most 4 columns",
-        "Item 1 (cubic, export.ts:9) is Fix and has a card with a status line, a 🔎 Grounded line, and a diff in context",
+        "Item 1 (cubic, export.ts:9) is Fix and has a card with ✅ Verified and 🔎 Sources lines, and a diff in context",
         "Item 2 (alex-dev rename) is Decline, grounded in CONTEXT.md",
         "Item 3 (CodeRabbit JSDoc from the review body) gets a reasoned call and is answered with a PR comment, not a thread reply",
         "The resolved thread, the Vercel comment, and the CodeRabbit walkthrough are not items",
