@@ -19,7 +19,7 @@ and are symlinked into each skill, so each skill installs self-contained. Scenar
 evals live in [`evals/`](evals/), and the review behind this
 design is in [`docs/research/`](docs/research/).
 
-`receiving-review` was inspired by Johan Frølich's original skill of the same name.
+`receiving-review` was inspired by Johan Frølich's original skill of the same name. `scope-grill` adapts the design-tree rounds from Matt Pocock's `grilling` skill ([mattpocock/skills](https://github.com/mattpocock/skills)).
 
 ## Install
 

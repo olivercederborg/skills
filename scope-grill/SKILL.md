@@ -36,8 +36,17 @@ goal goes under **Not now**.
   scope** list, one line each.
 - **Question creep is scope creep.** When a question only exists because an earlier
   answer widened the scope, say so.
-- **Ask in rounds** of up to four questions. Each has a recommended option, and one
-  answer can settle the round: `accept all recs` or `2B, rest recs`.
+- **Work the design tree.** Each decision opens the decisions that depend on it. A
+  round asks only the **frontier**: decisions whose prerequisites are settled. A
+  question that depends on another question still open this round waits for a later
+  round. After each answer, recompute the frontier.
+- **Ask in rounds** of up to four frontier questions, highest impact first. Each has a
+  recommended option, and one answer can settle the round: `accept all recs` or
+  `2B, rest recs`.
+- **Facts are yours; decisions are the user's.** Look up anything the code, config,
+  or tools can answer yourself, if needed with sub-agents in parallel. Don't ask the
+  user for it. While a lookup runs, only the questions that depend on it wait; ask the
+  rest now.
 
 ## 3. Show each option's impact
 
@@ -139,6 +148,7 @@ When the user asks to add it to an artifact:
    leave the rest of the artifact unchanged.
 4. **Confirm the change is visible,** and link it.
 
-**Done when:** every MVP decision is made, each widening was explicitly chosen, and
-the Not in scope list holds everything that was left out, in the artifact the user
-chose.
+**Done when:** the frontier is empty, with no decision left silently assumed. Every
+widening must have been explicitly chosen, and the Not in scope list must hold
+everything left out, in the artifact the user chose. Build nothing until the user
+confirms the shared understanding.
