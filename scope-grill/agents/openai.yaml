@@ -1,0 +1,6 @@
+interface:
+  display_name: "Scope Grill"
+  short_description: "Decide a plan by its code impact and scope"
+  default_prompt: "Use $scope-grill to grill me on this plan."
+policy:
+  allow_implicit_invocation: true
