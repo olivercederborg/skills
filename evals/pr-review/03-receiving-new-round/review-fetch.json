@@ -1,23 +1,101 @@
 {
-  "pr": {"number": 4600, "url": "https://github.com/example-org/example-app/pull/4600", "headRefOid": "HEAD"},
-  "ci": [{"name": "test", "state": "SUCCESS"}],
-  "threads": [
-    {"id": "PRRT_1", "isResolved": false, "path": "src/export.ts", "line": 9,
-     "comments": [
-       {"fullDatabaseId": "5000000001", "author": "cubic-dev-ai", "body": "**P1: Event can be lost on retry.** If `finalize` commits but `publish` throws, the retry returns early."},
-       {"fullDatabaseId": "5000000101", "author": "you", "body": "<sub>`AGENT` Claude Opus 5.5 · on behalf of **Oliver**</sub><br>\nFixed. A finalized account is now reused on retry and still published.\n\n<sub>Fixed in: `FIX_SHA`</sub>"}]},
-    {"id": "PRRT_2", "isResolved": false, "path": "src/discovery.ts", "line": 1,
-     "comments": [
-       {"fullDatabaseId": "5000000002", "author": "alex-dev", "body": "nit: `discoverDimensions` reads a bit odd, maybe `lookupDimensions`?"},
-       {"fullDatabaseId": "5000000102", "author": "you", "body": "<sub>`AGENT` Claude Opus 5.5 · on behalf of **Oliver**</sub><br>\nKeeping `discoverDimensions`. The glossary names this step Discovery."},
-       {"fullDatabaseId": "5000000202", "author": "alex-dev", "body": "fair, but then the file should be `discovery.service.ts` to match the other services, no?"}]},
-    {"id": "PRRT_4", "isResolved": false, "path": "src/export.ts", "line": 12,
-     "comments": [{"fullDatabaseId": "5000000004", "author": "sam-dev", "body": "Should `publish` get exponential backoff here? Upstream has been flaky lately."}]},
-    {"id": "PRRT_5", "isResolved": false, "path": "src/export.ts", "line": 3,
-     "comments": [
-       {"fullDatabaseId": "5000000005", "author": "cubic-dev-ai", "body": "Consider narrowing the `db` parameter type."},
-       {"fullDatabaseId": "5000000105", "author": "you", "body": "🤖 **[Agent]:** Keeping the inline type; it is the only caller."}]}
+  "pr": {
+    "number": 4600,
+    "url": "https://github.com/example-org/example-app/pull/4600",
+    "headRefOid": "HEAD"
+  },
+  "ci": [
+    {
+      "name": "test",
+      "state": "SUCCESS"
+    }
   ],
-  "reviews": [],
-  "conversationComments": []
+  "threads": [
+    {
+      "id": "PRRT_1",
+      "isResolved": false,
+      "path": "src/export.ts",
+      "line": 9,
+      "comments": [
+        {
+          "fullDatabaseId": "5000000001",
+          "author": "cubic-dev-ai",
+          "body": "**P1: Event can be lost on retry.** If `finalize` commits but `publish` throws, the retry returns early."
+        },
+        {
+          "fullDatabaseId": "5000000101",
+          "author": "you",
+          "body": "<sub>`AGENT` Claude Opus 5.5 · on behalf of **Oliver**</sub><br>\nFixed. A finalized account is now reused on retry and still published.\n\n<sub>Fixed in: `FIX_SHA`</sub>"
+        }
+      ]
+    },
+    {
+      "id": "PRRT_2",
+      "isResolved": false,
+      "path": "src/discovery.ts",
+      "line": 1,
+      "comments": [
+        {
+          "fullDatabaseId": "5000000002",
+          "author": "alex-dev",
+          "body": "nit: `discoverDimensions` reads a bit odd, maybe `lookupDimensions`?"
+        },
+        {
+          "fullDatabaseId": "5000000102",
+          "author": "you",
+          "body": "<sub>`AGENT` Claude Opus 5.5 · on behalf of **Oliver**</sub><br>\nKeeping `discoverDimensions`. The glossary names this step Discovery."
+        },
+        {
+          "fullDatabaseId": "5000000202",
+          "author": "alex-dev",
+          "body": "fair, but then the file should be `discovery.service.ts` to match the other services, no?"
+        }
+      ]
+    },
+    {
+      "id": "PRRT_4",
+      "isResolved": false,
+      "path": "src/export.ts",
+      "line": 12,
+      "comments": [
+        {
+          "fullDatabaseId": "5000000004",
+          "author": "sam-dev",
+          "body": "Should `publish` get exponential backoff here? Upstream has been flaky lately."
+        }
+      ]
+    },
+    {
+      "id": "PRRT_5",
+      "isResolved": false,
+      "path": "src/export.ts",
+      "line": 3,
+      "comments": [
+        {
+          "fullDatabaseId": "5000000005",
+          "author": "cubic-dev-ai",
+          "body": "Consider narrowing the `db` parameter type."
+        },
+        {
+          "fullDatabaseId": "5000000105",
+          "author": "you",
+          "body": "🤖 **[Agent]:** Keeping the inline type; it is the only caller."
+        }
+      ]
+    }
+  ],
+  "reviews": [
+    {
+      "author": "coderabbitai",
+      "state": "COMMENTED",
+      "body": "<details><summary>🧹 Nitpick comments (2)</summary>\n\n`src/export.ts` lines 3-7: Consider adding JSDoc to the exported `exportAccount` function describing the retry semantics.\n\n`src/discovery.ts` line 1: `discoverDimensions` returns a new array on every call; consider memoizing per company.\n</details>"
+    }
+  ],
+  "conversationComments": [
+    {
+      "author": "you",
+      "url": "https://github.com/example-org/example-app/pull/4600#issuecomment-1",
+      "body": "<sub>`AGENT` Claude Opus 5.5 · on behalf of **Oliver**</sub><br>\n> Consider adding JSDoc to the exported `exportAccount` function describing the retry semantics.\n\nKeeping this without JSDoc. The retry test documents the behavior."
+    }
+  ]
 }

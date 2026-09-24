@@ -6,17 +6,17 @@ finding, before showing it:
 
 - **Library behavior**: read the installed version's source or type declarations and
   the primary docs. If the repo provides a library-specific grounding skill, run it.
-  Otherwise run `grounding` for non-trivial library claims.
+  Otherwise run a general `grounding` skill if one is installed.
 - **Repo precedent**: find how the codebase already solves the same problem. Follow
   it, or say why this case differs.
 - **Repo rules**: check the conventions and ADRs that cover the touched area.
 - **Behavior in doubt**: run a focused reproduction at the PR head.
 
-Scope each claim to its evidence. "Can't happen" needs evidence covering every path.
-Otherwise say what was checked and what is assumed. When the user challenges a claim,
+Scope each claim to its evidence. "Can't happen" needs evidence covering every path;
+otherwise say what was checked and what is assumed. When the user challenges a claim,
 re-check it and say plainly what changed.
 
-Report the results on the card's status and grounding lines.
+Report the result on the card's status line and grounding line.
 
 **Done when:** every direction shown names the sources it was checked against, or the
 gap it still has.

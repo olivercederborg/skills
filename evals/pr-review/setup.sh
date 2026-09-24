@@ -3,6 +3,7 @@
 set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
 out="${1:-/tmp/pr-review-evals}"
+case "$out" in /tmp/*|/private/tmp/*) ;; *) echo "Refusing to write outside /tmp: $out" >&2; exit 1;; esac
 rm -rf "$out" && mkdir -p "$out"
 commit() { git -c user.email=eval@example.com -c user.name=eval commit -qm "$1"; }
 

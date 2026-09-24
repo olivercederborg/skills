@@ -3,4 +3,4 @@ interface:
   short_description: "Verify, fix, and answer review comments on your PR"
   default_prompt: "Use $receiving-review on the review comments on this PR."
 policy:
-  allow_implicit_invocation: false
+  allow_implicit_invocation: true

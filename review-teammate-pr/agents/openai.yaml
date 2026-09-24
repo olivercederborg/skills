@@ -3,4 +3,4 @@ interface:
   short_description: "Review a teammate PR and post approved comments"
   default_prompt: "Use $review-teammate-pr to review this teammate PR, discuss findings with me, and post the comments I approve."
 policy:
-  allow_implicit_invocation: false
+  allow_implicit_invocation: true

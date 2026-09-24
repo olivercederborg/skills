@@ -1,0 +1,87 @@
+{
+  "scenarios": [
+    {
+      "id": "01-receiving-first-round",
+      "skill": "receiving-review",
+      "prompt": "/receiving-review",
+      "turns": [
+        "all as recommended",
+        "yes"
+      ],
+      "assertions": [
+        "Turn 1 starts with a table of 3 items with at most 4 columns",
+        "Item 1 (cubic, export.ts:9) is Fix and has a card with a status line, a 🔎 Grounded line, and a diff in context",
+        "Item 2 (alex-dev rename) is Decline, grounded in CONTEXT.md",
+        "Item 3 (CodeRabbit JSDoc from the review body) gets a reasoned call and is answered with a PR comment, not a thread reply",
+        "The resolved thread, the Vercel comment, and the CodeRabbit walkthrough are not items",
+        "The CI Infisical failure appears once, as one FYI line",
+        "Every turn ends with exactly one bold Next: line, and no other question is asked in prose",
+        "After fixing, tests are one-line cases and replies are drafted without being asked",
+        "After yes: thread 1 resolved, thread 2 left open for alex-dev, item 3 posted as a PR comment",
+        "Replies start with the AGENT disclosure; the fix reply has a Fixed in footer with the real SHA"
+      ]
+    },
+    {
+      "id": "02-teammate-fee-rows",
+      "skill": "review-teammate-pr",
+      "prompt": "/review-teammate-pr https://github.com/example-org/example-app/pull/4610",
+      "turns": [
+        "question",
+        "lock",
+        "post all"
+      ],
+      "assertions": [
+        "Turn 1 lists findings with a verdict and a Dropped line, then shows card 1",
+        "Finds the fee row keyed on currency instead of fee",
+        "Finds that cursor is ignored, with the unknown cursor format flagged (⚠️ Unconfirmed or ⚠️ Not grounded)",
+        "The toPagination point is dropped as already raised by cubic",
+        "One decision per turn; drafts appear only after every finding is decided",
+        "Drafts render as blockquotes, each with a path:line target",
+        "post all builds one review with event COMMENT and no body, and does not approve the PR"
+      ]
+    },
+    {
+      "id": "03-receiving-new-round",
+      "skill": "receiving-review",
+      "prompt": "/receiving-review new round of comments",
+      "turns": [],
+      "assertions": [
+        "PRRT_1 and PRRT_5 are not items; both are listed as answered but still open, with a resolve plan",
+        "PRRT_5's older 🤖 **[Agent]:** prefix counts as our reply",
+        "PRRT_2 (alex-dev's follow-up after our decline) is an item, triaged against the repo's naming",
+        "PRRT_4 (sam-dev backoff) is Defer with a named follow-up issue, and nothing is created",
+        "CodeRabbit's JSDoc body finding is skipped because our PR comment already quotes it",
+        "CodeRabbit's memoization body finding is a new item",
+        "Table cells stay short, and reviewers are named by their login"
+      ]
+    }
+  ],
+  "triggers": {
+    "receiving-review": {
+      "should": [
+        "cubic left comments on my PR, can you handle them",
+        "new round of review comments on #4600",
+        "address the review feedback on my stack",
+        "reply to the reviewers on my PR and resolve what's fixed"
+      ],
+      "should_not": [
+        "review my diff before I open a PR",
+        "review Robin's PR #4610",
+        "write a PR description for this branch",
+        "why is CI failing on my PR"
+      ]
+    },
+    "review-teammate-pr": {
+      "should": [
+        "review https://github.com/example-org/example-app/pull/4610",
+        "can you review Robin's PR",
+        "re-review the PR now that Robin pushed fixes"
+      ],
+      "should_not": [
+        "handle the comments on my PR",
+        "review my own changes since develop",
+        "summarize what this PR does"
+      ]
+    }
+  }
+}

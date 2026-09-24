@@ -1,6 +1,7 @@
 ---
 name: receiving-review
-description: "Handles review comments on your own PR or stack: verifies each claim, then fixes, commits, pushes, replies, and resolves. Use when reviewers or bots (cubic, CodeRabbit) commented on your PR. For someone else's PR use review-teammate-pr; for your own unreviewed diff use code-review."
+description: "Handles review comments on the user's own PR or stack: verifies each claim, fixes, replies, and resolves threads. Use when reviewers or bots have commented on the PR, including a new round of comments."
+compatibility: Requires git, gh (authenticated), and jq.
 ---
 
 # Receiving review
@@ -9,28 +10,54 @@ Each comment is a claim to verify, not an order. Recommend a call, fix what the 
 accepts, and close the loop: push, reply, resolve. The loop is closed when every item
 has its reply posted and its thread in the agreed state.
 
-Read these shared references before the first turn:
+Before proposing any fix direction or technical decline, ground it by following
+[grounding](references/grounding.md).
 
-- [Chat format](../pr-review-format/references/chat-format.md): the
-  card layout and the rules for every turn.
-- [Grounding](../pr-review-format/references/grounding.md): the
-  research behind every fix direction and every decline.
+## Chat format
+
+The user thinks visually and scans. They understand a problem through its flow and
+the shape of the code.
+
+**Card.** Each item that needs a look is a card, in this order:
+
+1. `### 2/5 · <call>: <subject>`, where the call is Fix, Decline, Defer, or No change.
+2. Who raised it, and a linked `path:line`.
+3. Status, in at most eight words: `✅ Confirmed: <how>`, `❌ Doesn't hold: <why>`, or
+   `⚠️ Unconfirmed: <what's missing>`.
+4. `🔎 Grounded: <sources checked>`, plus `⚠️ Not grounded: <what>` for a gap. A
+   trivial fix skips this line.
+5. A picture, when the code alone doesn't make the flow clear: a text call tree,
+   failure sequence, or state flow.
+6. The change as a `diff`, with enough context to place it in the flow. That means the
+   whole function when it's small, or one block per file in call order, each headed by
+   its path.
+7. At most two one-line bullets for risks or assumptions.
+
+**Turns.**
+
+- Start with content: the table, a card, or the result.
+- Show each piece of code, warning, and `FYI:` once per session. List tests as
+  one-line cases, `file: scenario → expected ✅`.
+- Report what the user must look at or decide.
+- Bullets are one line: `thing → call: reason`.
+- Tables have at most four columns and a few words per cell.
+- Put side information, such as CI noise, on one `FYI:` line at the end.
+- End every turn with one bold `**Next:**` line of at most four short options. It is
+  the turn's only question.
 
 ## Example turns
-
-Triage:
 
 ````markdown
 | # | Who · where | Claim | Call |
 |---|-------------|-------|------|
 | 1 | cubic · `upload.ts:31` | Retry duplicates receipt | Fix |
 | 2 | sam · `upload.ts:12` | Inline `toKey` helper | Fix |
-| 3 | CodeRabbit · body | Log file size | Decline: PII policy |
+| 3 | CodeRabbit · review | Log file size | Decline: PII policy |
 
 ### 1/3 · Fix: upload retry creates a duplicate receipt
 cubic · [`receipts/upload.ts:31`](link)
-✅ Confirmed: a failing test uploads the same file twice
-🔎 Grounded: `upsert` precedent in `card-top-up.repository.ts` · Prisma compound-unique docs
+✅ Confirmed: failing test uploads twice
+🔎 Grounded: `upsert` precedent in `payments.repository.ts` · Prisma compound-unique docs
 
 ```text
 attempt 1: storage.put ✓ → receipts.create ✓ → respond ✗ timeout
@@ -72,14 +99,14 @@ Tests added:
 - `upload.test.ts`: same file uploaded twice → one receipt ✅
 
 **1** · cubic · reply + resolve
-> <sub>`AGENT` Claude Opus 5.5 · on behalf of **Oliver**</sub><br>
+> <sub>`AGENT` {model} · on behalf of **{name}**</sub><br>
 > Fixed. Uploads now upsert on `(transactionId, key)`, so a retried upload reuses the
 > receipt.
 >
 > <sub>Fixed in: `{sha}`</sub>
 
 **3** · CodeRabbit · PR comment
-> <sub>`AGENT` Claude Opus 5.5 · on behalf of **Oliver**</sub><br>
+> <sub>`AGENT` {model} · on behalf of **{name}**</sub><br>
 > Keeping file metadata out of logs. The logging policy treats uploaded file details
 > as PII.
 >
@@ -90,40 +117,39 @@ Tests added:
 
 ## 1. Fetch
 
-- Resolve the scope. It is an explicit PR number or URL, `stack` (every open PR in the
-  current stack, for example a Graphite stack), or the current branch's PR.
+- Resolve the scope: an explicit PR number or URL, `stack` (every open PR in the
+  current stack), or the current branch's PR.
 - Read the repository's version-control and pull-request guidance once.
-- Fetch with the [GitHub commands](../pr-review-format/references/github.md):
-  unresolved review threads, review bodies, PR conversation comments, and CI. Some bots
-  (CodeRabbit) post findings in review bodies, and a failing check often explains a
-  comment.
-- Keep threads that still need an answer: unresolved threads where the latest comment
-  is someone else's. A thread whose latest comment is our agent reply is already
-  answered. Also keep real findings from review bodies. Praise and bot walkthroughs are
-  context only.
-- On "new round of comments", list only the items that are new or changed since the
-  last round.
+- Fetch threads, review bodies, conversation comments, and CI with the
+  [GitHub commands](references/github.md). Some bots post findings in review bodies,
+  and a failing check often explains a comment.
+- **Open items**: unresolved threads where the latest comment is someone else's, and
+  review-body findings that none of our PR comments quote yet. Praise and bot
+  walkthroughs are context only.
+- **Answered but open**: unresolved threads where our agent reply is the latest
+  comment. The resolve defaults in step 4 apply to them.
+- On a new round, continue the numbering from the previous round and list only the
+  new or changed items.
 
-**Done when:** every open thread and review-body finding has a number, or the fetch
-shows none remain.
+**Done when:** every open item has a number, and every answered-but-open thread is
+known.
 
 ## 2. Triage
 
-Give each item a number and keep it for the whole session. The user refers to items by
-number ("don't address 1", "do 2-3").
+The user refers to items by number ("don't address 1", "do 2-3").
 
 Verify each claim against the PR head. In a stack, check whether another PR already
 handles it. Then give each item one call:
 
 - **Fix**: the smallest fix that fully solves it.
-- **Decline**: the claim is wrong, or the change isn't worth the risk. Give the
-  decisive reason.
-- **Defer**: valid but out of scope. Propose a follow-up issue in the repo's tracker.
-- **No change**: already handled. Resolve the thread.
+- **Decline**: the claim is wrong, or the change isn't worth the risk.
+- **Defer**: valid but out of scope. Name the follow-up issue's title and scope.
+- **No change**: already handled.
 
-Show the triage table. With more than five items, group the ones that share a root
-cause, code path, or fix. Add a Group column (`A — Retry`, or `—` for an item that
-stands alone) and keep each group's rows together. There is still one row per thread.
+Show the triage table. With more than five items, prefix related items with a group
+letter in the `#` cell (`A1`, `A2`) and keep each group's rows together. Answered but
+open threads get one line under the table, for example:
+`Answered, still open: 4, 7 → resolve with this round`.
 
 Below the table, show cards for:
 
@@ -132,66 +158,67 @@ Below the table, show cards for:
   boundary, a public API, or data shape.
 
 Small local fixes, such as a rename, an import, or a guard, show their code in the
-report after fixing. A card quotes the reviewer's comment with its link. Strip bot
-boilerplate and agent prompts from the quote.
+report after fixing. A card quotes the reviewer's comment with its link, without bot
+boilerplate or agent prompts.
 
-When every call is clear, end with `**Next:** all as recommended · discuss N`, so that
-one answer settles the round. Otherwise, go through the items that need a decision one
-card at a time. The user can also answer in a batch ("1 fix, 2 decline, 4 defer").
+When every call is clear, end with `**Next:** all as recommended · discuss N`. One
+answer settles the round, including the Defer issues as named. Otherwise, go through
+the items that need a decision one card at a time. The user can also answer in a batch
+("1 fix, 2 decline, 4 defer").
 
 **Done when:** every item has a call the user accepted, and every flow-changing fix
 has been shown as a card.
 
 ## 3. Fix
 
-"yes", "go for it", "fix it", or "do it" after a proposal authorizes that fix. A batch
-answer authorizes each item it names.
+An affirmative reply to a proposal authorizes it. A batch answer authorizes each item
+it names.
 
 - Start from a clean view of the working tree, and keep unrelated changes out of the
   fix. Fix on the lowest stack branch that owns the code, then restack.
 - Stay within the accepted scope, and run the repo's focused checks for the touched
   files.
-- Report in the "After fixing" shape above. Include code the user hasn't seen yet,
-  such as extra files or small fixes, and list tests as one-line cases.
+- Report in the "After fixing" shape, with the code the user hasn't seen yet.
 
 **Done when:** every accepted fix is applied, its checks pass, and the user has seen
 all of its code.
 
 ## 4. Deliver, reply, resolve
 
-As soon as the fixes are done, draft the replies. They follow the
-[reply style](references/reply-style.md), and each starts with the
-[agent disclosure](../pr-review-format/references/disclosure.md).
-Offer the rest of the loop as one `Next:`: commit, push, reply, resolve. One "yes"
-covers all of it.
+As soon as the fixes are done, draft the replies in the
+[reply style](references/reply-style.md). Each starts with the
+[agent disclosure](references/disclosure.md). Offer the rest of the loop as one
+`Next:`: commit, push, reply, resolve, plus "create N issues" when there are Defers.
+One "yes" covers all of it.
 
-- Push only when the user says so, either through that `Next:` or in their own words.
-  When they ask for part of the loop ("commit and push", "just reply"), do exactly
-  that part.
+- Push only when the user says so, through that `Next:` or in their own words. When
+  they ask for part of the loop ("commit and push", "just reply"), do exactly that
+  part.
 - When the user says they pushed, confirm the fix commit is on the remote PR head,
   then continue with the replies.
-- Approving the displayed drafts ("looks good", "post them", "yes") means posting them.
-  If the user edits a draft, show the revised version.
+- Approving the displayed drafts means posting them. If the user edits a draft, show
+  the revised version.
 
-What each call gets:
+Resolve defaults:
 
-- **Fix**: a reply after the commit is on the remote PR, with a `Fixed in` footer. Then
-  resolve the thread.
-- **Decline**: a reply with the decisive reason, bots included. Resolve bot threads,
-  and leave human threads for the reviewer to resolve.
-- **Defer**: propose the follow-up issue (title and scope). Create it once approved, then
-  reply with the link and leave the thread open.
-- **No change**: resolve. Add a reply when the reviewer needs the context.
+- **Fix**: reply once the commit is on the remote PR, with a `Fixed in` footer.
+  Resolve.
+- **Decline**: reply with the decisive reason. Resolve bot threads, and leave human
+  threads for the reviewer.
+- **Defer**: create the issue, reply with its link, and leave the thread open.
+- **No change**: resolve bot threads. On a human thread, reply with where it's handled
+  and leave it for the reviewer.
+- **Answered but open**: the same defaults, with no new reply.
 
 Re-fetch each thread right before posting to it. If a new reply has arrived, show it
-first. After posting, confirm the reply is visible. After an unclear write, read the
-thread before retrying, so each reply lands exactly once.
+first. After posting, confirm the reply is visible.
 
 **Done when:** every item has its reply posted and visible and its thread in the
 agreed state, or the blocker is named.
 
 ## 5. Finish
 
-End with a table of each item's outcome, commit, reply, and thread state. Then list
-what's still open: unpushed commits, pending follow-ups, and threads waiting on a
-reviewer.
+End with a table: `# · Outcome · Commit · Reply / thread`. Then list what's still
+open: unpushed commits, pending follow-ups, and threads waiting on a reviewer.
+
+**Done when:** every item has a row, and everything still open is listed.

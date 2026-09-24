@@ -1,5 +1,0 @@
-interface:
-  display_name: "PR Review Format"
-  short_description: "Shared reference for the PR review skills"
-policy:
-  allow_implicit_invocation: false
