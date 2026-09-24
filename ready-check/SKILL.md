@@ -17,7 +17,8 @@ list of nitpicks is not a verdict.
 - **Diff**: `git diff <base>...<head>` against the PR base or the parent branch. Only
   this diff is in scope. Code outside it is context.
 - **Intent**: the linked issue or spec, the PR description, and what the user agreed in
-  the conversation. Missing intent is itself a finding.
+  the conversation, including any **Not in scope** section. Missing intent is itself a
+  finding.
 
 **Done when:** the diff, its base, and the intended outcome are known.
 
@@ -28,7 +29,7 @@ a rule it breaks.
 
 | Lens | Question |
 |---|---|
-| **Scope** | Does it do what was asked, completely? Is anything here that wasn't asked for, such as speculative options, abstractions for future needs, or extra endpoints? Scope creep is a finding to cut, even when the code is good. |
+| **Scope** | Does it do what was asked, completely? Is anything here that wasn't asked for, such as speculative options, abstractions for future needs, or extra endpoints? Scope creep is a finding to cut, even when the code is good. Code for an item that the spec, ticket, or PR lists under **Not in scope** is always a finding: cut it, or have the user move the item back into scope. |
 | **Idiom** | Is each non-trivial pattern how the library's authors intend it? Ground it with the `grounding` skill, or [grounding](references/grounding.md) when that skill isn't installed. Repo precedent shows consistency, not idiom. |
 | **Standards** | Does it follow the repo's conventions and the user's coding standards? Apply a repo convention-pass skill and `coding-standards` when they're installed. |
 | **Slop** | See the slop list below, and apply the `simplify` criteria when that skill is installed. |

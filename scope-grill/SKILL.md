@@ -28,7 +28,8 @@ against its base. Mark anything in it that goes beyond the goal as a candidate f
 ````
 
 The line is what the goal needs, not what would be nice. Anything that doesn't serve the
-goal goes under **Not now**.
+goal goes under **Not now**. Below the block, give at most three one-line reasons, such
+as a dependency or a blocker found in the code.
 
 ## 2. Ask only the questions that matter
 
@@ -40,7 +41,7 @@ goal goes under **Not now**.
   round asks only the **frontier**: decisions whose prerequisites are settled. A
   question that depends on another question still open this round waits for a later
   round. After each answer, recompute the frontier.
-- **Ask in rounds** of up to four frontier questions, highest impact first. Each has a
+- **Ask in rounds** of two or three frontier questions, highest impact first. Each has a
   recommended option, and one answer can settle the round: `accept all recs` or
   `2B, rest recs`.
 - **Facts are yours; decisions are the user's.** Look up anything the code, config,
@@ -54,7 +55,7 @@ Each question lists its options side by side. For each option show:
 
 - **Change**: the smallest view that makes the impact clear, as a `diff` of the call
   tree, the file tree, or the code shape. Use a real excerpt from the code when it
-  exists.
+  exists, and keep it to about six lines.
 - **Scope**: one of three labels.
   - `= Same scope`
   - `− Narrower: <what it drops>`
@@ -86,10 +87,16 @@ Each question lists its options side by side. For each option show:
 
 **Recommend A:** exports are small enough to filter in memory. **B becomes worth it
 when** an export exceeds ~10k rows.
+🔎 Grounded: `export.ts` precedent · largest export in fixtures is 2k rows
 
 **Next:** A · B · discuss
 ````
 
+- **Grounded recommendation**: before recommending, ground it by following
+  [grounding](references/grounding.md): library docs and source, repo precedent, and
+  the repo's rules. Show `🔎 Grounded: <sources>` under the recommendation, plus
+  `⚠️ Not grounded: <what>` for any gap. Ground a losing option too when its idiom is
+  what decides the question.
 - **The recommendation** is the smallest option that meets the must-haves. When a wider
   option wins on merit, say plainly what it adds and why that is worth it now.
 - **"Becomes worth it when"**: every wider option that loses gets one line naming the
