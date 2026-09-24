@@ -1,0 +1,16 @@
+{
+  "pr": {"number": 4600, "url": "https://github.com/example-org/example-app/pull/4600", "headRefOid": "HEAD"},
+  "ci": [{"name": "trigger-deploy", "state": "FAILURE", "log": "Infisical: No valid login session found. Failed to automatically trigger login flow"}, {"name": "test", "state": "SUCCESS"}],
+  "threads": [
+    {"id": "PRRT_1", "isResolved": false, "path": "src/export.ts", "line": 9,
+     "comments": [{"fullDatabaseId": "5000000001", "author": "cubic-dev-ai", "url": "https://github.com/example-org/example-app/pull/4600#discussion_r5000000001",
+       "body": "**P1: Event can be lost on retry.** If `finalize` commits but `publish` throws, the task retries, `find` returns the finalized account, and the function returns early without publishing. The event is never sent.\n\n<!-- cubic:attribution -->\n<details><summary>Prompt for AI agents</summary>Fix the retry path in src/export.ts line 9...</details>"}]},
+    {"id": "PRRT_2", "isResolved": false, "path": "src/discovery.ts", "line": 1,
+     "comments": [{"fullDatabaseId": "5000000002", "author": "alex-dev", "url": "https://github.com/example-org/example-app/pull/4600#discussion_r5000000002",
+       "body": "nit: `discoverDimensions` reads a bit odd, maybe `lookupDimensions`? discovery sounds like a background job"}]},
+    {"id": "PRRT_3", "isResolved": true, "path": "src/export.ts", "line": 3,
+     "comments": [{"fullDatabaseId": "5000000003", "author": "cubic-dev-ai", "body": "Old resolved finding"}]}
+  ],
+  "reviews": [{"author": "coderabbitai", "state": "COMMENTED", "body": "**Actionable comments posted: 0**\n\n<details><summary>🧹 Nitpick comments (1)</summary>\n\n`src/export.ts` lines 3-7: Consider adding JSDoc to the exported `exportAccount` function describing the retry semantics.\n</details>\n\n<details><summary>📜 Review details</summary>Configuration used: CodeRabbit UI ...</details>"}],
+  "conversationComments": [{"author": "vercel", "body": "Deployment preview ready"}]
+}

@@ -1,0 +1,4 @@
+{"number": 4610, "url": "https://github.com/example-org/example-app/pull/4610", "author": "robin-dev", "base": "develop", "title": "Add fee rows to top-up export",
+ "linkedIssue": {"id": "EX-42", "body": "Top-up exports must include a separate fee row for every top-up that has a fee, so bookkeeping balances. Paginate exports with the existing cursor/limit input."},
+ "ci": [{"name": "test", "state": "SUCCESS"}],
+ "existingComments": [{"author": "cubic-dev-ai", "path": "src/fees.ts", "line": 3, "body": "`toPagination` just copies its input; consider removing it."}]}
