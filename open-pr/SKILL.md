@@ -86,6 +86,7 @@ One sentence: the problem this solves and what becomes possible after it ships.
 
 - 1–3 bullets: reviewer warnings, migrations, compatibility, deliberate omissions, or
   surprising decisions. Write "None." when there are none.
+- One line on undo and reach: `Door: two-way · Blast radius: export module only`.
 
 ## Change outline
 

@@ -168,14 +168,15 @@ Dropped 1: Codex's "unhandled rejection" at `queue.ts:8` is caught at line 12.
 
 When the user approves fixes:
 
-1. Apply them on the branch that owns each change, then run the focused checks.
+1. Apply them on the branch that owns each change, run the focused checks, and commit
+   each fix as its own atomic commit.
 2. Start the next round with the same reviewers and the updated diff. The prompt now
    lists the previous findings and their fixes.
 3. Report only what is new or still open.
 
 Stop when a round comes back with no blockers or should findings (**Clean**), or after
 three rounds, or when the user stops. After three rounds, list what's still open and
-let the user decide. Commit and push only when the user asks.
+let the user decide. Push only when the user asks.
 
 ## Challenges
 

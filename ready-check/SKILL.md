@@ -74,10 +74,10 @@ a rule it breaks.
 |---|---|
 | **Scope** | Does it do what was asked, completely? Is anything here that wasn't asked for, such as speculative options, abstractions for future needs, or extra endpoints? Scope creep is a finding to cut, even when the code is good. Code for an item that the spec, ticket, or PR lists under **Not in scope** is always a finding: cut it, or have the user move the item back into scope. |
 | **Idiom** | Is each non-trivial pattern how the library's authors intend it? Ground it with the `grounding` skill, or [grounding](references/grounding.md) when that skill isn't installed. Repo precedent shows consistency, not idiom. |
-| **Standards** | Does it follow the repo's conventions and the user's coding standards? Apply a repo convention-pass skill and `coding-standards` when they're installed. |
+| **Standards** | Does it follow the repo's conventions and the user's coding standards? Apply a repo convention-pass skill and `coding-standards` when they're installed. Names use the glossary's terms from `CONTEXT.md`, and a term the glossary says to avoid is a Should finding. |
 | **Slop** | See the slop list below, and apply the `simplify` criteria when that skill is installed. |
-| **Tests** | Does each test protect behavior that could regress? Are the minimum needed tests there, and no more? |
-| **Placement** | Does new code live in the module or domain that owns it? Before flagging code that looks odd, check git blame and its linked issue: it may be intentional. |
+| **Tests** | Does each test protect behavior that could regress? Are the minimum needed tests there, and no more? Do tests go through the interface rather than reaching past it, for example by querying the database directly? |
+| **Placement** | Does new code live in the module or domain that owns it? Is a new port or abstraction backed by two real adapters, not one? Use `codebase-design` when it's installed. Before flagging code that looks odd, check git blame and its linked issue: it may be intentional. |
 | **Verification** | Do the repo's focused typecheck, lint, and test commands pass for the touched packages? Run them. |
 | **PR** | Do the title and description match the actual diff, and follow the repo's PR template? |
 
@@ -95,6 +95,11 @@ a rule it breaks.
 - **Impossible-state guards**: defensive checks for states the types already rule out.
 - **Dead code**: unused exports, parameters, branches, and leftover compatibility paths
   for code that never shipped.
+- **Leftover debug output**: tagged or untagged debug logs.
+- **Heuristics** (Optional unless they cause harm):
+  - **Mysterious names**: a name that doesn't say what it holds or does.
+  - **Data clumps**: the same fields keep travelling together and want to be one type.
+  - **Shotgun surgery**: one logical change forces edits across many files.
 
 Give each finding a severity: Blocker, Should, or Optional.
 
@@ -146,8 +151,8 @@ When the user approves ("fix all", "fix blockers", "fix 1, 3"):
 3. Re-check only what the fixes touched, and give a new verdict in the same format.
    Show only code the user hasn't seen yet.
 
-Repeat until the verdict is **Done**, or the user stops. Commit and push only when the
-user asks.
+Repeat until the verdict is **Done**, or the user stops. Commit each fix as its own
+atomic commit, and push only when the user asks.
 
 ## Challenges
 

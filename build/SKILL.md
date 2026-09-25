@@ -56,8 +56,10 @@ build had to differ from the plan).
 
 ## 1. Load the plan
 
-- **Plan**: the decisions and the **Not in scope** list from `scope-grill`, taken from
-  this conversation or the ticket, plus the linked issue or spec.
+- **Plan**: the decisions, the test seams, and the **Not in scope** list from
+  `scope-grill`, taken from this conversation or the ticket, plus the linked issue or
+  spec.
+- **Domain terms**: read `CONTEXT.md` so names use the glossary's terms.
 - **Standards**: the repo's guidance and conventions, and `coding-standards` when it's
   installed.
 - **Branch**: confirm the current branch is the one that owns the change. In a stack,
@@ -72,21 +74,27 @@ are known.
 
 ## 2. Build in steps
 
-Split the plan into small vertical steps. After each step, the code builds and the tests
-pass. For each step:
+Split the plan into small vertical slices, each a thin working path through the code.
+After each step, the code builds and the tests pass. Work one slice at a time:
 
 1. **Ground it.** Before writing a non-trivial API call or pattern, ground it by
    following [grounding](references/grounding.md). Label a combination you haven't
    verified as `Proposal` until a check confirms it.
-2. **Test first where behavior can regress.** Write the fewest tests that cover the
-   step's distinct cases, at the seams the plan agreed on. Don't write tautological
-   tests.
-3. **Implement the smallest code that makes the step work.** Follow the plan's decisions
-   and the standards.
+2. **Red.** Where behavior can regress, write one test at the seam the plan agreed on,
+   and watch it fail for the right reason. Write the fewest tests that cover the step's
+   distinct cases, none of them tautological. Use `tdd` when it's installed.
+3. **Green.** Write the smallest code that passes the test, using the glossary's names
+   and the plan's decisions. Refactoring comes later, in `ready-check`.
 4. **Run the focused checks** for the touched files. A failing check stops the step until
    it's fixed.
 5. **Verify the behavior itself**, by running the code, calling the function, or
    exercising the UI. A passing typecheck alone isn't enough.
+6. **Commit the step** as one atomic commit. Its message says what the step does, and
+   it uses the repo's tooling (for example `gt modify -c` in a Graphite stack).
+
+When a check fails and the cause isn't clear, stop guessing. Use `diagnosing-bugs` when
+it's installed: form a hypothesis you can disprove, then test it. Tag any debug logs with
+a unique prefix (`[DEBUG-a4f2]`) and remove them before the step's commit.
 
 Run the full test suite once at the end.
 
@@ -122,7 +130,7 @@ Tests added:
 
 ⚠️ Deviation: none · Not in scope: untouched
 
-**Next:** ready-check · commit · review-loop
+**Next:** ready-check · review-loop · push
 ````
 
 - **Code the user hasn't seen**, as the change outline: a call tree, the file tree, or
@@ -131,8 +139,7 @@ Tests added:
 - **Deviations and scope**: any deviation, and confirmation that everything under Not in
   scope was left alone.
 
-Commit and push only when the user asks. Commit one step per commit when that makes the
-history easier to review.
+Each step lands as its own atomic commit. Push or submit only when the user asks.
 
 **Done when:** every decision in the plan is implemented, all checks pass, the behavior
 was run, nothing outside the plan was built, and the user has seen the code.

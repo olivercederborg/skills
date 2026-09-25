@@ -56,9 +56,10 @@ Card kinds here: one card per question, and each option is shown as described in
 
 ## 1. Set the scope line
 
-Before asking anything, read the request, the linked issue, and the code involved. When
-the starting point is an existing spec, ticket, or PR, read that too, plus the PR's diff
-against its base. Mark anything in it that goes beyond the goal as a candidate for
+Before asking anything, read the request, the linked issue, and the code involved. Also
+read the domain docs: `CONTEXT.md` (or the context `CONTEXT-MAP.md` points to) and the
+ADRs for the area. When the starting point is an existing spec, ticket, or PR, read that
+too, plus the PR's diff against its base. Mark anything in it that goes beyond the goal as a candidate for
 **Not now**. Then state the baseline in one short block and have the user confirm it:
 
 ````markdown
@@ -108,6 +109,10 @@ Each question lists its options side by side. For each option show:
   codebase, not a guess.
 - **Undo**: two-way door (easy to change later) or one-way door (hard to reverse,
   such as a migration or a public API).
+- **Seams**: a new port, adapter, or abstraction is `+ Wider` unless two real
+  implementations need it now. One adapter is a hypothetical seam, and two is a real
+  one. Use `codebase-design` for module and seam questions when it's installed.
+- **ADR conflicts**: when an option contradicts an existing ADR, say so on the option.
 
 ````markdown
 **Scope:** MVP + 0 · ~4 files
@@ -146,12 +151,33 @@ when** an export exceeds ~10k rows.
 - **Scope meter**: open every turn with `Scope: MVP + N · ~files`, and show a change in
   the meter the moment an answer widens the scope.
 
+### Domain docs as you go
+
+- **Glossary conflicts**: when the user's word conflicts with the glossary, or is fuzzy
+  (for example, "account" could mean Customer or User), put that to them as a question.
+- **Terms**: when an answer settles a domain term, show it on that question's card as a
+  one-line addition to `CONTEXT.md`. Write it when the user accepts the round, without
+  asking separately. A term never gets its own question, and `CONTEXT.md` stays a
+  glossary, with no implementation details.
+- **ADRs**: offer one only when a decision passes all three tests:
+  1. It's hard to reverse (the winning option is a one-way door).
+  2. It's the result of a real trade-off (a losing option has a "becomes worth it when"
+     line).
+  3. A future reader would be surprised without the reason.
+
+  Offer it by adding `+ ADR` to that turn's `Next:`.
+- **File formats**: use `domain-modeling` for the file formats and for repos with
+  several contexts when it's installed. Create files only when there is something to
+  write.
+
 ## 4. Watch the whole plan
 
 - **A wider pick** gets the meter change shown in the same turn, together with any
   new questions it creates.
 - **A second PR**: when the size passes what one reviewable PR can hold, say so. Propose
-  the split using `scope-pull-request` if it's installed.
+  the split using `scope-pull-request` if it's installed. Split into vertical slices,
+  each shipping a working part of the outcome. A wide rename or contract change goes
+  expand → migrate → contract.
 - **Challenges**: "are you sure?" asks for a re-check. Change a recommendation only on
   new evidence, and name that evidence.
 
@@ -166,9 +192,12 @@ When every question is decided, finish with:
 - **Not in scope**: the parked questions, the options that lost, and everything under
   **Not now**, in the format below.
 - **Size**: the estimated PR count and size.
+- **Test seams**: where the tests hook in. Use the highest seam that covers the
+  behavior, ideally one. `build` tests there.
+- **Docs**: `+N terms · N ADRs` written, or none.
 
-End with `**Next:** build · add Not in scope to <spec | ticket | PR> · done`. `build` implements the confirmed plan. Offer an ADR only
-when the user wants one.
+End with `**Next:** build · add Not in scope to <spec | ticket | PR> · done`. `build`
+implements the confirmed plan.
 
 ## Not in scope
 

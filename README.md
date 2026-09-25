@@ -49,6 +49,8 @@ coding-standards     used when writing or checking code: your TypeScript default
 Scenario evals live in [`evals/`](evals/). The review behind this design is in
 [`docs/research/`](docs/research/).
 
+The kit also uses these skills from [mattpocock/skills](https://github.com/mattpocock/skills) when they're installed: `codebase-design` (deep modules and seams), `domain-modeling` (`CONTEXT.md` glossary and ADRs), `tdd` (red-green loop), and `diagnosing-bugs` (debug loop). The one-line rules it needs from each are copied into the kit, so it works without them.
+
 `coding-standards` is adapted from dmmulroy's skill of the same name
 ([dmmulroy/skills](https://github.com/dmmulroy/skills), MIT; see its `NOTICE`).
 `receiving-review` was inspired by Johan Frølich's original skill of the same name.

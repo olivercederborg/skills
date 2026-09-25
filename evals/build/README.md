@@ -23,5 +23,5 @@ Grade each assertion PASS or FAIL, and quote the evidence:
 - **Checks:** the behavior is actually run (a sample export), and missing check tooling
   is reported as not run.
 - **Report:** it shows the change outline, lists tests as one-line cases, and ends with
-  `Next: ready-check · commit · review-loop`.
-- **Commits:** nothing is committed without being asked.
+  `Next: ready-check · review-loop · push`.
+- **Commits:** each step lands as its own atomic commit, and nothing is pushed.
