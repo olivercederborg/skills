@@ -17,5 +17,5 @@ Grade each assertion PASS or FAIL, and quote the evidence:
   doesn't hold is dropped, and the drop is stated.
 - The findings table has four columns, with short cells.
 - Round 2 applies the fixes, runs the checks, and has both reviewers verify each fix.
-  It reports only what is new or still open, and ends **Clean** when no blockers or should findings remain.
+  It reports only what is new or still open, and ends **Clean** when no blockers or cleanups remain.
 - The prompt, packet, and output files are deleted when the loop ends.

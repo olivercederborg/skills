@@ -35,7 +35,7 @@ shape of the code.
 **Severity** for code findings:
 
 - **Blocker**: wrong behavior, a missing requirement, a failing check, or a broken rule.
-- **Should**: slop, scope creep, or a non-idiomatic pattern with a clear better form.
+- **Cleanup**: slop, scope creep, or a non-idiomatic pattern with a clear better form.
 - **Optional**: a real improvement that can wait.
 
 **Turns.**
@@ -51,7 +51,7 @@ shape of the code.
   short options. It is the turn's only question.
 <!-- toolkit-format:end -->
 
-Card kinds here: **Blocker**, **Should**, **Optional**.
+Card kinds here: **Blocker**, **Cleanup**, **Optional**.
 
 ## 1. Pin the scope
 
@@ -72,9 +72,9 @@ it breaks.
 
 | Lens | Question |
 |---|---|
-| **Scope** | Does it do everything asked, and nothing more? Speculative options, future-proof abstractions, and extra endpoints are scope creep (Should). Code for a **Not in scope** item is a Should: cut it, or the user moves it back into scope. |
+| **Scope** | Does it do everything asked, and nothing more? Speculative options, future-proof abstractions, and extra endpoints are scope creep (Cleanup). Code for a **Not in scope** item is a Cleanup: cut it, or the user moves it back into scope. |
 | **Idiom** | Is each non-trivial pattern how the library's authors intend it? Ground it with [grounding](references/grounding.md). Repo precedent shows consistency, not idiom. |
-| **Standards** | Does it follow the repo's conventions and the user's coding standards? Apply a repo convention-pass skill and `coding-standards` when installed. Names use the glossary's terms from `CONTEXT.md`; a term the glossary says to avoid is a Should. |
+| **Standards** | Does it follow the repo's conventions and the user's coding standards? Apply a repo convention-pass skill and `coding-standards` when installed. Names use the glossary's terms from `CONTEXT.md`; a term the glossary says to avoid is a Cleanup. |
 | **Slop** | Check the slop list below, and apply the `simplify` criteria when that skill is installed. |
 | **Tests** | Does each test protect behavior that could regress, with the minimum needed and no more? Do tests go through the interface, rather than reaching past it (for example, by querying the database directly)? |
 | **Placement** | Does new code live in the module or domain that owns it? Is a new port or abstraction backed by two real adapters? Use `codebase-design` when installed. Before flagging odd-looking code, check git blame and its linked issue: it may be intentional. |
@@ -108,13 +108,13 @@ it breaks.
 Lead with the verdict, then the findings:
 
 ````markdown
-**Not done: 1 blocker, 2 should.**
+**Not done: 1 blocker, 2 cleanups.**
 
 | # | Where | Finding | Kind |
 |---|-------|---------|------|
 | 1 | `export.ts:12` | Retry skips publish | Blocker |
-| 2 | `export.test.ts:30` | Asserts the mock's own return | Should |
-| 3 | `export.ts:4` | `prepareRows` only forwards | Should |
+| 2 | `export.test.ts:30` | Asserts the mock's own return | Cleanup |
+| 3 | `export.ts:4` | `prepareRows` only forwards | Cleanup |
 
 ### 1/3 · Blocker: retry skips publish
 [`src/export.ts:12`](link)
@@ -132,7 +132,7 @@ Lead with the verdict, then the findings:
 ````
 
 - **Verdict first**: **Done** (no findings), **Done with optional notes** (Optional
-  findings only), or **Not done: N blockers, N should**.
+  findings only), or **Not done: N blockers, N cleanups**.
 - **Cards** only for blockers, and for findings whose fix changes the flow or design.
 - **Checks line**: one line with each check's result.
 - **When done**: list the scope checked, and end with `**Next:** review-loop · open-pr`.

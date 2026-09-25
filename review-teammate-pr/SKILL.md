@@ -42,7 +42,7 @@ shape of the code.
 **Severity** for code findings:
 
 - **Blocker**: wrong behavior, a missing requirement, a failing check, or a broken rule.
-- **Should**: slop, scope creep, or a non-idiomatic pattern with a clear better form.
+- **Cleanup**: slop, scope creep, or a non-idiomatic pattern with a clear better form.
 - **Optional**: a real improvement that can wait.
 
 **Turns.**
@@ -58,7 +58,7 @@ shape of the code.
   short options. It is the turn's only question.
 <!-- toolkit-format:end -->
 
-Card kinds here: **Blocker**, **Should**, **Optional**, and **Question** (for an
+Card kinds here: **Blocker**, **Cleanup**, **Optional**, and **Question** (for an
 unverified concern).
 
 ## Example finding card (illustrative: match the shape, not the content)

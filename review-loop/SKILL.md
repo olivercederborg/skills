@@ -36,7 +36,7 @@ shape of the code.
 **Severity** for code findings:
 
 - **Blocker**: wrong behavior, a missing requirement, a failing check, or a broken rule.
-- **Should**: slop, scope creep, or a non-idiomatic pattern with a clear better form.
+- **Cleanup**: slop, scope creep, or a non-idiomatic pattern with a clear better form.
 - **Optional**: a real improvement that can wait.
 
 **Turns.**
@@ -52,7 +52,7 @@ shape of the code.
   short options. It is the turn's only question.
 <!-- toolkit-format:end -->
 
-Card kinds here: **Blocker**, **Should**, **Optional**.
+Card kinds here: **Blocker**, **Cleanup**, **Optional**.
 
 ## Reviewers
 
@@ -121,7 +121,7 @@ regressions and anything new in the updated diff.>
 Report every finding with a severity, a file:line, the failure it causes, and the
 smallest fix:
 Blocker: wrong behavior, data loss, security, a failing check, or a broken rule.
-Should: slop, scope creep, a non-idiomatic pattern, or changed behavior without a test.
+Cleanup: slop, scope creep, a non-idiomatic pattern, or changed behavior without a test.
 Optional: a real improvement that can wait.
 Give a complete, independent review. If there are no findings, say so.
 ```
@@ -140,13 +140,13 @@ Give a complete, independent review. If there are no findings, say so.
 ## 4. Report
 
 ````markdown
-**Round 1: 1 blocker, 2 should.** Claude 2 · Codex 2 · both agree on 1.
+**Round 1: 1 blocker, 2 cleanups.** Claude 2 · Codex 2 · both agree on 1.
 
 | # | Where | Finding | Sev · who |
 |---|-------|---------|-----------|
 | 1 | `retry.ts:40` | Retry double-charges | Blocker · both |
-| 2 | `retry.ts:12` | Backoff never caps | Should · Codex |
-| 3 | `retry.test.ts` | No test for the timeout path | Should · Claude |
+| 2 | `retry.ts:12` | Backoff never caps | Cleanup · Codex |
+| 3 | `retry.test.ts` | No test for the timeout path | Cleanup · Claude |
 
 ### 1/3 · Blocker: retry double-charges
 [`src/retry.ts:40`](link)

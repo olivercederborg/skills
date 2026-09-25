@@ -36,7 +36,7 @@ shape of the code.
 **Severity** for code findings:
 
 - **Blocker**: wrong behavior, a missing requirement, a failing check, or a broken rule.
-- **Should**: slop, scope creep, or a non-idiomatic pattern with a clear better form.
+- **Cleanup**: slop, scope creep, or a non-idiomatic pattern with a clear better form.
 - **Optional**: a real improvement that can wait.
 
 **Turns.**

@@ -30,7 +30,7 @@ coding-standards      underneath build and verify-work: your TypeScript defaults
 
 - **One chat format** ([`shared/format.md`](shared/format.md)): the verdict comes first,
   items are cards with `✅ Verified` / `🔎 Sources` / `⚠️ Unverified` lines, code
-  findings use Blocker / Should / Optional, and each turn ends with one `Next:` question.
+  findings use Blocker / Cleanup / Optional, and each turn ends with one `Next:` question.
 - **One source for each shared rule.** The format is copied into each workflow skill so
   it survives context compaction: run `scripts/sync-format.sh` after editing it, and
   use `--check` to catch drift. Grounding rules live only in the `grounding` skill.
