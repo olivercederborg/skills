@@ -53,7 +53,6 @@ The kit also uses these skills from [mattpocock/skills](https://github.com/mattp
 
 `coding-standards` is adapted from dmmulroy's skill of the same name
 ([dmmulroy/skills](https://github.com/dmmulroy/skills), MIT; see its `NOTICE`).
-`address-review` was inspired by Johan Frølich's `receiving-review` skill.
 `open-pr`'s default body is modeled on HumanLayer's `visual-pr` skill
 ([humanlayer/skills](https://github.com/humanlayer/skills)). `scope-grill` adapts the design-tree rounds from Matt Pocock's `grilling` skill
 ([mattpocock/skills](https://github.com/mattpocock/skills)).
