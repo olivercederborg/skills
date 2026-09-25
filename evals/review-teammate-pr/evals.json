@@ -1,0 +1,37 @@
+{
+  "scenarios": [
+    {
+      "id": "fee-rows",
+      "skill": "review-teammate-pr",
+      "prompt": "/review-teammate-pr https://github.com/example-org/example-app/pull/4610",
+      "turns": [
+        "question",
+        "lock",
+        "post all"
+      ],
+      "assertions": [
+        "Turn 1 lists findings with a verdict and a Dropped line, then shows card 1",
+        "Finds the fee row keyed on currency instead of fee (Blocker)",
+        "Finds that cursor is ignored, with the unknown cursor format flagged (⚠️ Unverified)",
+        "The toPagination point is dropped as already raised by cubic",
+        "One decision per turn; drafts appear only after every finding is decided",
+        "Drafts render as blockquotes, each with a path:line target",
+        "post all builds one review with event COMMENT and no body, and does not approve the PR"
+      ]
+    }
+  ],
+  "triggers": {
+    "review-teammate-pr": {
+      "should": [
+        "review https://github.com/example-org/example-app/pull/4610",
+        "can you review Robin's PR",
+        "re-review the PR now that Robin pushed fixes"
+      ],
+      "should_not": [
+        "handle the comments on my PR",
+        "review my own changes since develop",
+        "summarize what this PR does"
+      ]
+    }
+  }
+}

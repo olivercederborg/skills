@@ -1,6 +1,6 @@
 # verify-work evals
 
-`./setup.sh` builds a repo on `feature/csv-export` with seven planted problems. Start a
+`./setup.sh` builds a repo on `feature/csv-export` with the planted problems listed below. Start a
 fresh session in `/tmp/verify-work-eval`, tell the agent to use no `gh` and no
 network, then send these three turns in order:
 
@@ -21,3 +21,8 @@ Grade each assertion PASS or FAIL, and quote the evidence:
   turn ends with one `Next:` line.
 - Turn 2 applies every fix, reruns the tests, and returns **Done**, optionally with notes.
 - Turn 3 answers "Nothing further", names the scope it checked, and adds no new findings.
+
+## Trigger check
+
+"is this idiomatic?" about a whole branch should load `verify-work`. The same question
+about one API or pattern should load `grounding`.

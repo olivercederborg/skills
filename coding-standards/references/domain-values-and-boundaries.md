@@ -39,7 +39,7 @@ Add a protocol or persistence type only when its shape or meaning differs from t
 Use names consistently:
 
 - `parseX` for untrusted or less-structured input
-- `makeX` or `createX` for smart constructors from typed parts
+- `makeX` for smart constructors from typed parts
 - `isX` for predicates
 - `assertX` only at a framework or test boundary that requires assertion
 

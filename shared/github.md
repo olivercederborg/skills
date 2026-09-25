@@ -94,5 +94,4 @@ gh api --method POST repos/OWNER/REPO/pulls/N/reviews/REVIEW_ID/events -f event=
 gh api repos/OWNER/REPO/pulls/N/reviews/REVIEW_ID/comments --jq '.[] | {path, line, html_url}'
 ```
 
-After an unclear write result, read the thread or review to see what landed, then
-continue from there.
+After an unclear write, read back what landed before retrying, so nothing posts twice.

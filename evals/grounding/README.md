@@ -1,6 +1,7 @@
-# Grounding evaluation
+# grounding evals
 
-Evaluate at least four completed real tasks:
+Evaluate at least four completed real tasks, each in a fresh session, with and without
+the skill:
 
 - an installed JavaScript or TypeScript package
 - a package from another ecosystem
@@ -34,6 +35,10 @@ Score each check `pass`, `fail`, or `not applicable`:
 | Reuse | Unchanged evidence is reused, and only invalidated claims are rechecked. |
 | Focus | Research and reporting resolve a specific decision, and any delegation adds independent value. |
 
-Keep the existing invocation policy. Treat technical corrections as evidence for the
-relevant check. Report gaps without claiming that these cases prove general
-correctness. Change the skill only where observed behavior supports the change.
+Treat technical corrections as evidence for the relevant check. Change the skill only
+where observed behavior supports the change.
+
+## Trigger check
+
+"is `catchTag` idiomatic here?" or "are you sure?" about one claim should load
+`grounding`. "Is this branch done and idiomatic?" should load `verify-work`.

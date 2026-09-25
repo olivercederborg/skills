@@ -1,15 +1,13 @@
 ---
 name: scope-grill
-description: Stress-tests a plan or design by asking only the decisions that matter, showing what each option changes in the code and whether it widens the scope, and defaulting to the smallest option that meets the goal. Produces a "Not in scope" list for a spec, ticket, or PR description. Use when the user wants to be grilled on a plan, to decide an approach before building, or to scope an existing spec, ticket, or PR.
+description: Stress-tests a plan by asking only the decisions that matter, showing each option's code impact and scope, and ending with a "Not in scope" list. Use when the user wants to be grilled on a plan, to decide an approach before building, or to scope a spec, ticket, or PR.
 ---
 
 # Scope grill
 
-Help the user decide a plan by seeing each option's consequences in the code, with the
-scope kept in the open. AI-driven plans tend to widen scope one reasonable-sounding
-decision at a time, until an MVP becomes a large, slow, over-built PR. Every question
-here shows whether an option keeps the scope, narrows it, or widens it, and the default
-is always the smallest option that meets the goal.
+Decide a plan by its code impact, with scope in the open. Plans widen one reasonable
+decision at a time, so every option carries a scope label, and the default is the
+smallest option that meets the goal.
 
 <!-- toolkit-format:start (synced from shared/format.md by scripts/sync-format.sh; edit there) -->
 ## Chat format
@@ -21,9 +19,10 @@ shape of the code.
 
 1. **Heading**: `### 2/5 · <kind>: <subject>`. The progress count shows what's left,
    and each skill defines its own kinds.
-2. **Location**: who raised it (their login), and a linked `path:line`.
+2. **Location**: a linked `path:line`, plus the login of whoever raised it.
 3. **Evidence lines**, a few words each:
-   - `✅ Verified: <how>`, or `❌ Doesn't hold: <why>`
+   - `✅ Verified: <how>` when the finding or claim holds, or `❌ Doesn't hold: <why>`
+     when a reviewer's claim turns out wrong
    - `🔎 Sources: <what was checked>`
    - `⚠️ Unverified: <gap>`, only when a gap remains
 4. **A picture**, when the code alone doesn't make the flow clear: a text call tree, a
@@ -31,19 +30,19 @@ shape of the code.
 5. **The change** as a `diff`, with enough context to place it in the flow. That means
    the whole function when it's small, or one block per file in call order, each headed
    by its path.
-6. **At most two one-line bullets** for risks or assumptions.
+6. **One-line bullets** for the risks or assumptions that change the decision.
 
 **Severity** for code findings:
 
-- **Blocker**: wrong behavior, missing scope, a failing check, or a broken rule.
+- **Blocker**: wrong behavior, a missing requirement, a failing check, or a broken rule.
 - **Should**: slop, scope creep, or a non-idiomatic pattern with a clear better form.
 - **Optional**: a real improvement that can wait.
 
 **Turns.**
 
 - **Start with content**: the verdict, a table, a card, or the result.
-- **Once per session**: show each piece of code, warning, and `FYI:` only once. List
-  tests as one-line cases: `file: scenario → expected ✅`.
+- **Say it once**: show each piece of code, warning, and `FYI:` once per session.
+- **Tests** as one-line cases: `file: scenario → expected ✅`.
 - **Only what needs the user**: report what they must look at or decide.
 - **One-line bullets.**
 - **Tables**: at most four columns, with a few words per cell.
@@ -52,72 +51,74 @@ shape of the code.
   short options. It is the turn's only question.
 <!-- toolkit-format:end -->
 
-Card kinds here: one card per question, and each option is shown as described in step 3.
+Card kind here: **Question**, one per decision.
 
 ## 1. Set the scope line
 
-Before asking anything, read the request, the linked issue, and the code involved. Also
-read the domain docs: `CONTEXT.md` (or the context `CONTEXT-MAP.md` points to) and the
-ADRs for the area. When the starting point is an existing spec, ticket, or PR, read that
-too, plus the PR's diff against its base. Mark anything in it that goes beyond the goal as a candidate for
-**Not now**. Then state the baseline in one short block and have the user confirm it:
+Before asking anything, read:
+
+- the request, the linked issue, and the code involved;
+- the domain docs: `CONTEXT.md` (or the context `CONTEXT-MAP.md` points to) and the
+  ADRs for the area;
+- when starting from an existing spec, ticket, or PR, that artifact, and for a PR its
+  diff against the base.
+
+Then state the baseline and have the user confirm it:
 
 ````markdown
 **Goal:** export transactions as CSV for one date range
 **Must have (MVP):** CSV with 4 columns · inclusive date filter · one download button
-**Not now:** JSON or other formats · scheduling · column picker
+**Not in scope:** JSON or other formats · scheduling · column picker
 **Size now:** ~4 files · 1 PR
 
 **Next:** confirm · edit
 ````
 
-The line is what the goal needs, not what would be nice. Anything that doesn't serve the
-goal goes under **Not now**. Below the block, give at most three one-line reasons, such
-as a dependency or a blocker found in the code.
+**Must have** is what the goal needs, and everything else goes under **Not in scope**.
+Below the block, give the one-line reasons that shaped it, such as a dependency or a
+blocker found in the code.
 
 ## 2. Ask only the questions that matter
 
-- **Only decisions that change the MVP's code.** Park other questions in the **Not in
-  scope** list, one line each.
-- **Question creep is scope creep.** When a question only exists because an earlier
+- **MVP decisions only.** Ask about decisions that change the MVP's code, and park
+  everything else in **Not in scope**, one line each.
+- **Question creep is scope creep.** When a question exists only because an earlier
   answer widened the scope, say so.
-- **Work the design tree.** Each decision opens the decisions that depend on it. A
-  round asks only the **frontier**: decisions whose prerequisites are settled. A
-  question that depends on another question still open this round waits for a later
-  round. After each answer, recompute the frontier.
-- **Ask in rounds** of two or three frontier questions, highest impact first. Each has a
+- **Work the design tree.** A round asks only the **frontier**, meaning decisions whose
+  prerequisites are settled. A question that depends on one still open waits for a
+  later round. Recompute the frontier after each answer.
+- **Rounds** have two or three frontier questions, highest impact first. Each has a
   recommended option, and one answer can settle the round: `accept all recs` or
   `2B, rest recs`.
-- **Facts are yours; decisions are the user's.** Look up anything the code, config,
-  or tools can answer yourself, if needed with sub-agents in parallel. Don't ask the
-  user for it. While a lookup runs, only the questions that depend on it wait; ask the
-  rest now.
+- **Facts are yours; decisions are the user's.** Look up what the code, config, or
+  tools can answer, using sub-agents in parallel if needed. While a lookup runs, only
+  the questions that depend on it wait.
 
 ## 3. Show each option's impact
 
 Each question lists its options side by side. For each option show:
 
 - **Change**: the smallest view that makes the impact clear, as a `diff` of the call
-  tree, the file tree, or the code shape. Use a real excerpt from the code when it
-  exists, and keep it to about six lines.
+  tree, the file tree, or the code shape. Use a real excerpt from the code when one
+  exists, trimmed to the lines that show the impact.
 - **Scope**: one of three labels.
   - `= Same scope`
   - `− Narrower: <what it drops>`
-  - `+ Wider: <what it adds>`, where the addition is a new concept, module, config,
-    migration, public API, or test surface.
-- **Size**: files touched, with `≈` for an estimate. Base the count on a search of the
-  codebase, not a guess.
+  - `+ Wider: <what it adds>`: a new concept, module, config, migration, public API,
+    test surface, or a seam with only one real implementation. A seam is real when two
+    implementations need it now. Use `codebase-design` for seam questions when it's
+    installed.
+- **Size**: files touched, counted from a codebase search. Mark estimates with `≈`.
 - **Undo**: two-way door (easy to change later) or one-way door (hard to reverse,
   such as a migration or a public API).
-- **Seams**: a new port, adapter, or abstraction is `+ Wider` unless two real
-  implementations need it now. One adapter is a hypothetical seam, and two is a real
-  one. Use `codebase-design` for module and seam questions when it's installed.
-- **ADR conflicts**: when an option contradicts an existing ADR, say so on the option.
+- **ADR conflicts**: say so on any option that contradicts an existing ADR.
+
+## Example question (illustrative: match the shape, not the content)
 
 ````markdown
 **Scope:** MVP + 0 · ~4 files
 
-### Q2/5 · Where does the date filter run?
+### 2/5 · Question: where does the date filter run?
 
 **A · In the export function** (recommended) · `= Same scope` · 1 file · two-way
 ```diff
@@ -140,64 +141,62 @@ when** an export exceeds ~10k rows.
 **Next:** A · B · discuss
 ````
 
-- **Grounded recommendation**: before recommending, ground it by following
-  [grounding](references/grounding.md): library docs and source, repo precedent, and
-  the repo's rules. Show the evidence lines under the recommendation. Ground a losing option too when its idiom is
-  what decides the question.
-- **The recommendation** is the smallest option that meets the must-haves. When a wider
-  option wins on merit, say plainly what it adds and why that is worth it now.
+- **The recommendation** is the smallest option that meets the must-haves. Ground it
+  with [grounding](references/grounding.md) and show its evidence lines. Also ground a
+  losing option when its idiom decides the question. When a wider option wins on
+  merit, say what it adds and why it's worth it now.
 - **"Becomes worth it when"**: every wider option that loses gets one line naming the
-  concrete signal that would justify it later. It then goes to the **Not in scope** list.
-- **Scope meter**: open every turn with `Scope: MVP + N · ~files`, and show a change in
-  the meter the moment an answer widens the scope.
+  signal that would justify it later, and then moves to **Not in scope**.
+- **Scope meter**: open every turn with `Scope: MVP + N · ~files`. N counts the
+  widenings the user accepted.
 
 ### Domain docs as you go
 
 - **Glossary conflicts**: when the user's word conflicts with the glossary, or is fuzzy
-  (for example, "account" could mean Customer or User), put that to them as a question.
-- **Terms**: when an answer settles a domain term, show it on that question's card as a
-  one-line addition to `CONTEXT.md`. Write it when the user accepts the round, without
-  asking separately. A term never gets its own question, and `CONTEXT.md` stays a
-  glossary, with no implementation details.
-- **ADRs**: offer one only when a decision passes all three tests:
+  (for example, "account" could mean Customer or User), ask which they mean.
+- **Terms**: when an answer settles a domain term, show it on that card as a one-line
+  addition to `CONTEXT.md`, and write it when the user accepts the round. A term never
+  gets its own question. `CONTEXT.md` stays a glossary, with no implementation details.
+- **ADRs**: offer one, as `+ ADR` in that turn's `Next:`, only when a decision passes all
+  three tests:
   1. It's hard to reverse (the winning option is a one-way door).
   2. It's the result of a real trade-off (a losing option has a "becomes worth it when"
      line).
   3. A future reader would be surprised without the reason.
-
-  Offer it by adding `+ ADR` to that turn's `Next:`.
-- **File formats**: use `domain-modeling` for the file formats and for repos with
-  several contexts when it's installed. Create files only when there is something to
-  write.
+- **File formats**: use `domain-modeling` for file formats and for repos with several
+  contexts, when it's installed. Create files only when there is something to write.
 
 ## 4. Watch the whole plan
 
-- **A wider pick** gets the meter change shown in the same turn, together with any
-  new questions it creates.
-- **A second PR**: when the size passes what one reviewable PR can hold, say so. Propose
-  the split using `scope-pull-request` if it's installed. Split into vertical slices,
-  each shipping a working part of the outcome. A wide rename or contract change goes
-  expand → migrate → contract.
+- **A wider pick** changes the meter in the same turn and shows any new questions it
+  creates.
+- **A second PR**: when the size passes what one reviewable PR can hold, say so, and
+  propose the split, using `scope-pull-request` if it's installed.
+  - Split into vertical slices, each shipping a working part of the outcome.
+  - A wide rename or contract change goes expand → migrate → contract.
 - **Challenges**: "are you sure?" asks for a re-check. Change a recommendation only on
   new evidence, and name that evidence.
 
 ## 5. Summary
 
-When every question is decided, finish with:
+When the frontier is empty, finish with:
 
-- **Decisions**: one line each, with the scope label.
+- **Decisions**: one line each, with its scope label.
 - **Resulting shape**: one combined `diff` of the call tree or the file tree.
-- **Scope**: the final meter against the baseline, and every widening with the answer
+- **Scope**: the final meter against the baseline, and each widening with the answer
   that caused it.
-- **Not in scope**: the parked questions, the options that lost, and everything under
-  **Not now**, in the format below.
+- **Not in scope**: the parked questions, the losing options, and the baseline's
+  exclusions, in the format below.
 - **Size**: the estimated PR count and size.
 - **Test seams**: where the tests hook in. Use the highest seam that covers the
-  behavior, ideally one. `build` tests there.
+  behavior, ideally one.
 - **Docs**: `+N terms · N ADRs` written, or none.
 
-End with `**Next:** build · add Not in scope to <spec | ticket | PR> · done`. `build`
-implements the confirmed plan.
+End with `**Next:** build · add Not in scope to <spec | ticket | PR> · done`. Offer
+`build` only after the user confirms the summary.
+
+**Done when:** no decision is left silently assumed, the user explicitly chose every
+widening, and the Not in scope list holds everything left out.
 
 ## Not in scope
 
@@ -210,23 +209,15 @@ would bring it back.
 - **JSON export**: the request is CSV only. Revisit when a consumer needs JSON.
 - **Per-company time zones**: transaction dates carry no time. Revisit when dates
   include times or month boundaries are reported wrong.
-- **Job runner**: an external scheduler runs the command. Revisit when a second
-  scheduled job needs one.
 ```
 
 When the user asks to add it to an artifact:
 
-1. **Show the exact section first,** with its target: the spec file, the ticket, or the
-   PR.
+1. **Show the exact section** and its target: the spec file, the ticket, or the PR.
 2. **Write it once the user approves.**
    - **Spec file:** edit the file.
    - **Ticket:** use the repo's issue-tracker tool.
    - **PR:** `gh pr view N --json body`, then `gh pr edit N --body-file <file>`.
-3. **Replace an existing "Not in scope" section** rather than adding a second one, and
-   leave the rest of the artifact unchanged.
+3. **Replace any existing "Not in scope" section,** and leave the rest of the artifact
+   as it is.
 4. **Confirm the change is visible,** and link it.
-
-**Done when:** the frontier is empty, with no decision left silently assumed. Every
-widening must have been explicitly chosen, and the Not in scope list must hold
-everything left out, in the artifact the user chose. Build nothing until the user
-confirms the shared understanding.

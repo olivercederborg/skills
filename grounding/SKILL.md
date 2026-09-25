@@ -1,6 +1,6 @@
 ---
 name: grounding
-description: Verifies a technical claim or decision against installed code, primary docs, and project rules before it is relied on. Use when asked whether something is idiomatic, correct, or best practice, when asked "are you sure?", or to verify a recommendation.
+description: Verifies a technical claim or decision against installed code, primary docs, and project rules before it is relied on. Use when asked whether a specific API, pattern, or claim is idiomatic, correct, or best practice, when asked "are you sure?", or to verify a recommendation.
 ---
 
 # Grounding
@@ -25,15 +25,15 @@ Check every row that applies:
 | Design or architecture | The project's docs, ADRs, and domain rules, plus the relevant spec or standard. Add a minimal reproduction when the docs don't settle it. |
 
 When a docs MCP server for the library is connected (for example effect-docs or
-context7), use it alongside the installed source. If the two disagree about the
-installed version, the installed source wins.
+context7), use it alongside the installed source.
 
 ### Idiomatic and best-practice claims
 
 "Idiomatic" means the way the library's authors intend it to be used. Rank the evidence
 in this order:
 
-1. The library's official docs, guides, and examples.
+1. The library's official docs, guides, and examples for the installed version. When
+   docs and the installed source disagree, the source wins.
 2. The library's own source, tests, and maintained example repos, at the installed
    version.
 3. The project's rules: its conventions and ADRs.
@@ -52,11 +52,8 @@ sources conflict or leave a material gap.
 - **Uncertain API combinations or runtime behavior**: run a minimal example against
   the installed version before calling it working. Label an untested sketch
   `Proposal`.
-- **Experiments**: resolve uncertainty with reversible local experiments. Pause only
-  the work whose remaining ambiguity touches user intent, security, external effects,
-  or a public contract.
-- **Delegation**: hand off a bounded question only when independent expertise helps
-  and delegation is authorized.
+- **Experiments**: settle uncertainty with reversible local experiments. Ask only when
+  the gap touches user intent, security, external effects, or a public contract.
 - **Open details**: an unresolved implementation detail stays an open question. Keep
   it separate from the verdict on the design.
 
@@ -102,8 +99,5 @@ state stay unchanged. Explaining, implementing an accepted decision, drafting co
 and a final review all reuse it. Recheck only what new code, new state, or conflicting
 evidence invalidates, and state a changed conclusion in one line.
 
-**Done when:** the answer gives a verdict, the evidence it rests on, and anything still
-unverified.
-
-Read [references/evaluation.md](references/evaluation.md) only when the user asks to
-evaluate this skill.
+**Done when:** every applicable Sources row is checked, and the answer opens with the
+verdict, then the change, then the evidence lines.

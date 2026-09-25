@@ -30,12 +30,11 @@ Name things by what they are or do in the domain, in plain words:
 ## Control flow
 
 Keep functions flat. Replace nested `if` blocks with early returns, guard clauses, or a
-lookup table. When branches grow, extract a named predicate or a small function. Don't
-indent deeper.
+lookup table. When branches grow, extract a named predicate or a small function.
 
 ## Casts, `any`, and non-null assertions
 
-Avoid `any`, non-null assertions, and casts. `as const` is fine.
+Avoid `any`, non-null assertions, and casts: branch, parse, or refine instead. `as const` is fine.
 
 Use a cast only when TypeScript cannot express a checked invariant, such as a branding implementation or interop boundary. Add a focused safety comment:
 
@@ -44,7 +43,7 @@ Use a cast only when TypeScript cannot express a checked invariant, such as a br
 return normalized as EmailAddress;
 ```
 
-A rare `any` also needs a targeted lint suppression and safety reason. Do not use a non-null assertion. Branch, parse, or refine instead.
+A rare `any` also needs a targeted lint suppression and safety reason.
 
 ## Imports and exports
 
@@ -63,7 +62,7 @@ Avoid vague names such as `utils.ts`, `helpers.ts`, `common.ts`, and `misc.ts`. 
 
 Small generic helpers may share an explicit module when they have no more precise owner. Keep domain and application policy with their semantic owner.
 
-Do not impose a file-size limit. Split a file when it has unrelated reasons to change or makes callers understand unrelated concepts.
+Split a file when it has unrelated reasons to change or makes callers understand unrelated concepts.
 
 ## Comments and JSDoc
 
@@ -77,6 +76,6 @@ Use JSDoc when it helps a caller understand a public contract. Good candidates i
 - configuration, protocol, or extension points with caller obligations
 - public fields with non-obvious meaning, units, lifecycle, or sensitivity
 
-Do not require JSDoc for every export. Skip it when the name and type state the complete contract. Put documentation on the original declaration, not its re-exports.
+Skip JSDoc when the name and type state the whole contract. Put documentation on the original declaration, not its re-exports.
 
-Do not use inheritance tags. Write the needed documentation on the declaration. Use `@throws` only for defects or framework-required throws, not expected typed failures.
+Use `@throws` only for defects or framework-required throws, not expected typed failures.

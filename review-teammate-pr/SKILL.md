@@ -26,9 +26,10 @@ shape of the code.
 
 1. **Heading**: `### 2/5 · <kind>: <subject>`. The progress count shows what's left,
    and each skill defines its own kinds.
-2. **Location**: who raised it (their login), and a linked `path:line`.
+2. **Location**: a linked `path:line`, plus the login of whoever raised it.
 3. **Evidence lines**, a few words each:
-   - `✅ Verified: <how>`, or `❌ Doesn't hold: <why>`
+   - `✅ Verified: <how>` when the finding or claim holds, or `❌ Doesn't hold: <why>`
+     when a reviewer's claim turns out wrong
    - `🔎 Sources: <what was checked>`
    - `⚠️ Unverified: <gap>`, only when a gap remains
 4. **A picture**, when the code alone doesn't make the flow clear: a text call tree, a
@@ -36,19 +37,19 @@ shape of the code.
 5. **The change** as a `diff`, with enough context to place it in the flow. That means
    the whole function when it's small, or one block per file in call order, each headed
    by its path.
-6. **At most two one-line bullets** for risks or assumptions.
+6. **One-line bullets** for the risks or assumptions that change the decision.
 
 **Severity** for code findings:
 
-- **Blocker**: wrong behavior, missing scope, a failing check, or a broken rule.
+- **Blocker**: wrong behavior, a missing requirement, a failing check, or a broken rule.
 - **Should**: slop, scope creep, or a non-idiomatic pattern with a clear better form.
 - **Optional**: a real improvement that can wait.
 
 **Turns.**
 
 - **Start with content**: the verdict, a table, a card, or the result.
-- **Once per session**: show each piece of code, warning, and `FYI:` only once. List
-  tests as one-line cases: `file: scenario → expected ✅`.
+- **Say it once**: show each piece of code, warning, and `FYI:` once per session.
+- **Tests** as one-line cases: `file: scenario → expected ✅`.
 - **Only what needs the user**: report what they must look at or decide.
 - **One-line bullets.**
 - **Tables**: at most four columns, with a few words per cell.
@@ -57,15 +58,17 @@ shape of the code.
   short options. It is the turn's only question.
 <!-- toolkit-format:end -->
 
-Card kinds here: **Bug**, **Suggestion**, **Question**.
+Card kinds here: **Blocker**, **Should**, **Optional**, and **Question** (for an
+unverified concern).
 
-## Example finding card
+## Example finding card (illustrative: match the shape, not the content)
 
 ````markdown
-### 1/2 · Bug: export reads other companies' transactions
+### 1/2 · Blocker: export reads other companies' transactions
 [`exports/handler.ts:18`](link) · spec: EX-12
 ✅ Verified: traced handler to query
-🔎 Sources: `CurrentCompany` scoping in `transactions.repository.ts` · ⚠️ Unverified: admin-only route?
+🔎 Sources: `CurrentCompany` scoping in `transactions.repository.ts`
+⚠️ Unverified: whether the route is admin-only
 
 ```text
 GET /exports → exportHandler → transactions.findMany({ bookedAt })   ← no companyId
@@ -91,8 +94,7 @@ GET /exports → exportHandler → transactions.findMany({ bookedAt })   ← no 
 
 - Fetch the title, description, linked issue (the spec), base and head SHAs, changed
   files, CI status, and existing review comments, using the
-  [GitHub commands](references/github.md). Leave out whatever humans or bots already
-  raised.
+  [GitHub commands](references/github.md).
 - Review the code at the PR head (`git fetch`, then `git show <head>:<path>`).
 - For a stacked PR, diff against the parent branch's head. Later PRs in the stack are
   context only, so review this PR as if it lands alone.
@@ -127,8 +129,8 @@ nits, speculative failures, points others already raised, and broad refactors.
 The first turn is the findings list with a verdict, followed by card 1:
 
 ```text
-2 findings (1 bug, 1 question). Would approve after 1.
-1. Bug: export reads other companies' transactions (`handler.ts:18`)
+2 findings (1 blocker, 1 question). Would approve after 1.
+1. Blocker: export reads other companies' transactions (`handler.ts:18`)
 2. Question: is the CSV header order part of the contract? (`csv.ts:7`)
 Dropped 3: 2 nits, 1 already raised by cubic.
 ```
@@ -170,6 +172,8 @@ version.
 - Post the new inline comments together as one review with `event=COMMENT` and no
   review body. Post replies to existing threads separately.
 - Approving, requesting changes, and merging stay with the user.
+
+End with `**Next:** re-review after fixes · done`.
 
 **Done when:** every comment is visible at its target, and the links are shared.
 

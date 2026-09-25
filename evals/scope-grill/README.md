@@ -23,7 +23,7 @@ Grade each assertion PASS or FAIL, and quote the evidence:
     with confirm or edit.
   - It flags that EX-9 depends on the unmerged EX-7 branch and that branch's bugs.
 - **Turn 2**
-  - At most four questions.
+  - Two or three questions.
   - Every option shows a code-shape `diff` or sketch, a scope label (`=`, `−`, or `+`),
     a file count, and a one-way or two-way door.
   - Each losing wider option says when it would become worth it.

@@ -13,7 +13,7 @@ Keep behavior matrices at lower layers. Add a thin end-to-end test when full wir
 
 Avoid module mocks such as `vi.mock` and `jest.mock`. Prefer constructor-injected dependencies, Effect services and Layers, local infrastructure, in-memory adapters, or fake external adapters.
 
-Do not add a module mock when a real seam is practical. When changing a module-mocked test, move it toward a real seam when that migration stays within scope. A framework boundary may still need a focused mock when it offers no practical seam.
+When changing a module-mocked test, move it toward a real seam when that migration stays within scope. A framework boundary may still need a focused mock when it offers no practical seam.
 
 Assert observable behavior, such as a returned value, typed error, persisted state, emitted event, rendered output, or operation recorded by a fake adapter.
 
@@ -46,10 +46,8 @@ Tests must not bypass parsers, smart constructors, or invariants. A property mus
 
 ## How many tests
 
-Write the fewest tests that cover the behavior's distinct cases: the main path, each
-boundary, and each failure the change handles. Don't repeat a case at another layer or
-with other data that exercises the same branch. Don't add tests for behavior the change
-didn't touch. More tests are not better coverage when they prove the same thing twice.
+Write one test per distinct case the change touches: the main path, each boundary, and
+each failure it handles. Cover each branch once, at one layer.
 
 ## Test quality
 
@@ -57,4 +55,4 @@ Keep setup deterministic, minimal, and visible. Use fixed clocks, IDs, and rando
 
 Test public behavior, not private helpers, component structure, or dependency call order. Test a private detail only when it is part of the contract or no public seam exposes the risk.
 
-Do not write a test that only repeats library or framework behavior. Test application-owned wiring, configuration, serialization, compatibility assumptions, decisions, transformations, validation, and side effects.
+Test application-owned wiring, configuration, serialization, compatibility assumptions, decisions, transformations, validation, and side effects. Library and framework behavior is tested by its authors.

@@ -7,8 +7,7 @@ compatibility: Requires git, gh (authenticated), and jq.
 # Address review
 
 Each comment is a claim to verify, not an order. Recommend a call, fix what the user
-accepts, and close the loop: push, reply, resolve. The loop is closed when every item
-has its reply posted and its thread in the agreed state.
+accepts, and close the loop: push, reply, resolve.
 
 Before proposing any fix direction or technical decline, ground it by following
 [grounding](references/grounding.md).
@@ -23,9 +22,10 @@ shape of the code.
 
 1. **Heading**: `### 2/5 · <kind>: <subject>`. The progress count shows what's left,
    and each skill defines its own kinds.
-2. **Location**: who raised it (their login), and a linked `path:line`.
+2. **Location**: a linked `path:line`, plus the login of whoever raised it.
 3. **Evidence lines**, a few words each:
-   - `✅ Verified: <how>`, or `❌ Doesn't hold: <why>`
+   - `✅ Verified: <how>` when the finding or claim holds, or `❌ Doesn't hold: <why>`
+     when a reviewer's claim turns out wrong
    - `🔎 Sources: <what was checked>`
    - `⚠️ Unverified: <gap>`, only when a gap remains
 4. **A picture**, when the code alone doesn't make the flow clear: a text call tree, a
@@ -33,19 +33,19 @@ shape of the code.
 5. **The change** as a `diff`, with enough context to place it in the flow. That means
    the whole function when it's small, or one block per file in call order, each headed
    by its path.
-6. **At most two one-line bullets** for risks or assumptions.
+6. **One-line bullets** for the risks or assumptions that change the decision.
 
 **Severity** for code findings:
 
-- **Blocker**: wrong behavior, missing scope, a failing check, or a broken rule.
+- **Blocker**: wrong behavior, a missing requirement, a failing check, or a broken rule.
 - **Should**: slop, scope creep, or a non-idiomatic pattern with a clear better form.
 - **Optional**: a real improvement that can wait.
 
 **Turns.**
 
 - **Start with content**: the verdict, a table, a card, or the result.
-- **Once per session**: show each piece of code, warning, and `FYI:` only once. List
-  tests as one-line cases: `file: scenario → expected ✅`.
+- **Say it once**: show each piece of code, warning, and `FYI:` once per session.
+- **Tests** as one-line cases: `file: scenario → expected ✅`.
 - **Only what needs the user**: report what they must look at or decide.
 - **One-line bullets.**
 - **Tables**: at most four columns, with a few words per cell.
@@ -56,7 +56,7 @@ shape of the code.
 
 Card kinds here: **Fix**, **Decline**, **Defer**, **No change**.
 
-## Example turns
+## Example turns (illustrative: match the shape, not the content)
 
 ````markdown
 | # | Who · where | Claim | Call |
@@ -67,6 +67,8 @@ Card kinds here: **Fix**, **Decline**, **Defer**, **No change**.
 
 ### 1/3 · Fix: upload retry creates a duplicate receipt
 cubic · [`receipts/upload.ts:31`](link)
+> Retrying after a timeout creates a second receipt.
+
 ✅ Verified: failing test uploads twice
 🔎 Sources: `upsert` precedent in `payments.repository.ts` · Prisma compound-unique docs
 
@@ -97,7 +99,7 @@ attempt 2: storage.put ✓ → receipts.create ✓   ← second receipt row
 After fixing:
 
 ````markdown
-### Fixed locally · ✅ tests 4/4 · ✅ lint · ✅ typecheck
+### Fixed and committed · ✅ tests 4/4 · ✅ lint · ✅ typecheck
 
 ```diff
  // receipts/upload.ts
@@ -123,7 +125,7 @@ Tests added:
 >
 > <sub>Grounded in: `docs/conventions/logging.md`</sub>
 
-**Next:** commit, push, reply, resolve · edit N · commit only
+**Next:** push, reply, resolve · edit N · just push
 ````
 
 ## 1. Fetch
@@ -146,8 +148,6 @@ Tests added:
 known.
 
 ## 2. Triage
-
-The user refers to items by number ("don't address 1", "do 2-3").
 
 Verify each claim against the PR head. In a stack, check whether another PR already
 handles it. Then give each item one call:
@@ -174,8 +174,8 @@ boilerplate or agent prompts.
 
 When every call is clear, end with `**Next:** all as recommended · discuss N`. One
 answer settles the round, including the Defer issues as named. Otherwise, go through
-the items that need a decision one card at a time. The user can also answer in a batch
-("1 fix, 2 decline, 4 defer").
+the items that need a decision one card at a time. The user can answer by number or in
+a batch ("do 2-3", "1 fix, 2 decline, 4 defer").
 
 **Done when:** every item has a call the user accepted, and every flow-changing fix
 has been shown as a card.
@@ -185,8 +185,9 @@ has been shown as a card.
 An affirmative reply to a proposal authorizes it. A batch answer authorizes each item
 it names.
 
-- Start from a clean view of the working tree, and keep unrelated changes out of the
-  fix. Fix on the lowest stack branch that owns the code, then restack.
+- Check `git status` first, and keep unrelated changes out of the fix. Fix on the lowest
+  stack branch that owns the code, then restack.
+- Commit each fix as its own atomic commit.
 - Stay within the accepted scope, and run the repo's focused checks for the touched
   files.
 - Report in the "After fixing" shape, with the code the user hasn't seen yet.
@@ -199,16 +200,14 @@ all of its code.
 As soon as the fixes are done, draft the replies in the
 [reply style](references/reply-style.md). Each starts with the
 [agent disclosure](references/disclosure.md). Offer the rest of the loop as one
-`Next:`: commit, push, reply, resolve, plus "create N issues" when there are Defers.
-One "yes" covers all of it.
+`Next:`: push, reply, resolve, plus "create N issues" when there are Defers. One "yes"
+covers all of it, including posting the displayed drafts.
 
 - Push only when the user says so, through that `Next:` or in their own words. When
-  they ask for part of the loop ("commit and push", "just reply"), do exactly that
-  part.
+  they ask for part of the loop ("just push", "just reply"), do exactly that part.
 - When the user says they pushed, confirm the fix commit is on the remote PR head,
   then continue with the replies.
-- Approving the displayed drafts means posting them. If the user edits a draft, show
-  the revised version.
+- If the user edits a draft, show the revised version.
 
 Resolve defaults:
 

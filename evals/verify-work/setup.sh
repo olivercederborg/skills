@@ -6,7 +6,7 @@ case "$out" in /tmp/*|/private/tmp/*) ;; *) echo "Refusing to write outside /tmp
 rm -rf "$out" && mkdir -p "$out/src" && cd "$out" && git init -q -b main
 commit() { git -c user.email=eval@example.com -c user.name=eval commit -qm "$1"; }
 cat > package.json <<'EOF'
-{ "name": "ready-eval", "private": true, "type": "module", "scripts": { "test": "bun test" } }
+{ "name": "verify-work-eval", "private": true, "type": "module", "scripts": { "test": "bun test" } }
 EOF
 cat > CONVENTIONS.md <<'EOF'
 # Conventions

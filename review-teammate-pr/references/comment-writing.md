@@ -8,27 +8,26 @@ after one read.
   - **lock**: state the condition and the consequence, then the fix: "If X, then Y.
     Could we Z?"
   - **optional**: prefix `Non-blocking:`.
-  - **question**: ask it, or frame it as something for the author to verify.
-- **Keep it short.** Two to four sentences, holding only what the author needs to act.
+  - **question**: prefix `Question:` and ask it, or frame it as something for the author
+    to verify. A question never blocks.
+- **Keep it short:** only what the author needs to act.
 - **Add a snippet only when the fix would otherwise be ambiguous.** Use a `diff`, or a
   sketch labeled `Target shape`, with real symbols and installed APIs.
-- **Ask for a test only when one is needed** to lock in the behavior.
+- **Ask for a test** when the behavior could silently regress.
 - **Keep the scope tight.** Name adjacent work as a follow-up.
 
-## Examples
+## Examples (illustrative: match the shape, not the content)
 
 lock, small fix:
 
 > <sub>`AGENT` {model} · on behalf of **{name}**</sub><br>
-> Could we keep the empty value controlled?
+> After a failed first selection, the Combobox ignores the reset to `undefined` and
+> keeps showing the old value. Could we keep the empty value controlled?
 >
 > ```diff
 > - value={displayedCategoryId ?? undefined}
 > + value={optimisticCategoryId ?? ""}
 > ```
->
-> The Combobox ignores a reset to `undefined`, so after a failed first selection the
-> old value stays displayed.
 
 lock, less obvious:
 
@@ -40,7 +39,7 @@ lock, less obvious:
 question:
 
 > <sub>`AGENT` {model} · on behalf of **{name}**</sub><br>
-> Question, non-blocking: the CSV columns are now built from `Object.keys(row)`. Do
+> Question: the CSV columns are now built from `Object.keys(row)`. Do
 > any consumers rely on the old header order? If so, an explicit column list would
 > keep it stable.
 
