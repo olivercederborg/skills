@@ -84,7 +84,7 @@ After each step, the code builds and the tests pass. Work one slice at a time:
    and watch it fail for the right reason. Write the fewest tests that cover the step's
    distinct cases, none of them tautological. Use `tdd` when it's installed.
 3. **Green.** Write the smallest code that passes the test, using the glossary's names
-   and the plan's decisions. Refactoring comes later, in `ready-check`.
+   and the plan's decisions. Refactoring comes later, in `verify-work`.
 4. **Run the focused checks** for the touched files. A failing check stops the step until
    it's fixed.
 5. **Verify the behavior itself**, by running the code, calling the function, or
@@ -130,7 +130,7 @@ Tests added:
 
 ⚠️ Deviation: none · Not in scope: untouched
 
-**Next:** ready-check · review-loop · push
+**Next:** verify-work · review-loop · push
 ````
 
 - **Code the user hasn't seen**, as the change outline: a call tree, the file tree, or

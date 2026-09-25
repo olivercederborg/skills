@@ -1,6 +1,6 @@
 # review-loop evals
 
-This eval reuses the ready-check scenario: `../ready-check/setup.sh /tmp/review-loop-eval`.
+This eval reuses the verify-work scenario: `../verify-work/setup.sh /tmp/review-loop-eval`.
 Start a fresh Claude Code session in that directory, with the `claude` and `codex` CLIs
 signed in. Send these two turns in order:
 

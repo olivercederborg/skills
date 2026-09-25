@@ -161,7 +161,7 @@ Dropped 1: Codex's "unhandled rejection" at `queue.ts:8` is caught at line 12.
 ````
 
 - **Verdict first.** Write **Clean**, or the round number and the counts by severity.
-  A clean round ends with `**Next:** ready-check · open-pr`.
+  A clean round ends with `**Next:** verify-work · open-pr`.
 - **Cards** for blockers, and for any fix that changes the flow or design.
 
 ## 5. Fix and re-review

@@ -1,6 +1,6 @@
 # build evals
 
-Run `../ready-check/setup.sh /tmp/build-eval`, then `git checkout -b feature/csv-fixes`
+Run `../verify-work/setup.sh /tmp/build-eval`, then `git checkout -b feature/csv-fixes`
 inside it. Start a fresh session there (no network), and give the agent this agreed
 plan as earlier conversation:
 
@@ -23,5 +23,5 @@ Grade each assertion PASS or FAIL, and quote the evidence:
 - **Checks:** the behavior is actually run (a sample export), and missing check tooling
   is reported as not run.
 - **Report:** it shows the change outline, lists tests as one-line cases, and ends with
-  `Next: ready-check · review-loop · push`.
+  `Next: verify-work · review-loop · push`.
 - **Commits:** each step lands as its own atomic commit, and nothing is pushed.

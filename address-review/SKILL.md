@@ -1,10 +1,10 @@
 ---
-name: receiving-review
+name: address-review
 description: "Handles review comments on the user's own PR or stack: verifies each claim, fixes, replies, and resolves threads. Use when reviewers or bots have commented on the PR, including a new round of comments."
 compatibility: Requires git, gh (authenticated), and jq.
 ---
 
-# Receiving review
+# Address review
 
 Each comment is a claim to verify, not an order. Recommend a call, fix what the user
 accepts, and close the loop: push, reply, resolve. The loop is closed when every item

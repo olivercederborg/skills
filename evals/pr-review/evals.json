@@ -2,8 +2,8 @@
   "scenarios": [
     {
       "id": "01-receiving-first-round",
-      "skill": "receiving-review",
-      "prompt": "/receiving-review",
+      "skill": "address-review",
+      "prompt": "/address-review",
       "turns": [
         "all as recommended",
         "yes"
@@ -42,8 +42,8 @@
     },
     {
       "id": "03-receiving-new-round",
-      "skill": "receiving-review",
-      "prompt": "/receiving-review new round of comments",
+      "skill": "address-review",
+      "prompt": "/address-review new round of comments",
       "turns": [],
       "assertions": [
         "PRRT_1 and PRRT_5 are not items; both are listed as answered but still open, with a resolve plan",
@@ -57,7 +57,7 @@
     }
   ],
   "triggers": {
-    "receiving-review": {
+    "address-review": {
       "should": [
         "cubic left comments on my PR, can you handle them",
         "new round of review comments on #4600",

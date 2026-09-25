@@ -9,11 +9,11 @@ the agent to use no `gh` and no network.
   text), and Evidence.
 - Known gaps (missing `currency`, the JSON option) go in Special things to note, and the
   issue link says "Part of", not "Closes".
-- It doesn't review the code with cards. It offers `ready-check first` in `Next:`.
+- It doesn't review the code with cards. It offers `verify-work first` in `Next:`.
 
 **sync/**: "is the PR description still accurate?" (`pr.json` is the live PR)
 - The verdict is **Not current**.
 - It flags the title (still says JSON), the stale JSON note, and the stale change
   outline, each as a `diff` of the description.
 - Robin's note on inclusive date bounds is kept word for word.
-- Code problems (the mock test) are left to `ready-check`.
+- Code problems (the mock test) are left to `verify-work`.

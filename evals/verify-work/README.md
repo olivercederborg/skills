@@ -1,7 +1,7 @@
-# ready-check evals
+# verify-work evals
 
 `./setup.sh` builds a repo on `feature/csv-export` with seven planted problems. Start a
-fresh session in `/tmp/ready-check-eval`, tell the agent to use no `gh` and no
+fresh session in `/tmp/verify-work-eval`, tell the agent to use no `gh` and no
 network, then send these three turns in order:
 
 1. "is this done and ready for review?"

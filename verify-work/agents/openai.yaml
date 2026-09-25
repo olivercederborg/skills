@@ -1,6 +1,6 @@
 interface:
-  display_name: "Ready Check"
+  display_name: "Verify Work"
   short_description: "Verdict on whether a branch, PR, or stack is done"
-  default_prompt: "Use $ready-check to tell me if this work is done."
+  default_prompt: "Use $verify-work to tell me if this work is done."
 policy:
   allow_implicit_invocation: true

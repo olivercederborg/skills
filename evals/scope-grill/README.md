@@ -3,7 +3,7 @@
 Build the repo, then add the planning issue:
 
 ```sh
-../ready-check/setup.sh /tmp/grill-eval
+../verify-work/setup.sh /tmp/grill-eval
 cd /tmp/grill-eval && git checkout -q main
 printf '\n# EX-9: Monthly export email\nCompany admins want last month'"'"'s transactions CSV emailed to them on the 1st of each month.\n' >> ISSUE.md
 mkdir -p src/jobs && echo 'export const jobs = [] as const // cron-style job registry, currently empty' > src/jobs/registry.ts

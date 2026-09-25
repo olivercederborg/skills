@@ -63,7 +63,7 @@ the PR's description, not the code.
   has one.
 - **Kit output**: when available, collect
   - the ticket's **Not in scope** section (from `scope-grill`);
-  - the latest `ready-check` verdict and checks line;
+  - the latest `verify-work` verdict and checks line;
   - the latest `review-loop` result.
 
 **Done when:** each PR's mode, base, diff, template, and linked issue are known.
@@ -131,8 +131,8 @@ GitHub and in Slack.
 - **The title** says the outcome in the imperative, in under 70 characters.
 - **Scope check**: if the diff mixes unrelated outcomes or is too big to review, say so
   and offer `scope-pull-request` before opening.
-- **Describe, don't review.** Code review belongs to `ready-check` and `review-loop`.
-  When no recent `ready-check` verdict exists, add `ready-check first` to the `Next:`
+- **Describe, don't review.** Code review belongs to `verify-work` and `review-loop`.
+  When no recent `verify-work` verdict exists, add `verify-work first` to the `Next:`
   options. Put known gaps in **Special things to note**. Use "Part of" instead of
   "Closes" when the issue isn't fully done.
 
@@ -166,7 +166,7 @@ every behavior change in the diff.
   own stack links rather than writing a second copy.
 
 After publishing, end with `**Next:** done · sync later`. When review comments arrive,
-`receiving-review` picks up from there.
+`address-review` picks up from there.
 
 **Done when:** every approved PR shows its approved title and body, and the links are
 shared.

@@ -5,8 +5,8 @@ here="$(cd "$(dirname "$0")" && pwd)"
 out="${1:-/tmp/open-pr-eval}"
 case "$out" in /tmp/*|/private/tmp/*) ;; *) echo "Refusing to write outside /tmp: $out" >&2; exit 1;; esac
 rm -rf "$out"
-"$here/../ready-check/setup.sh" "$out/open" >/dev/null
-"$here/../ready-check/setup.sh" "$out/sync" >/dev/null
+"$here/../verify-work/setup.sh" "$out/open" >/dev/null
+"$here/../verify-work/setup.sh" "$out/sync" >/dev/null
 cd "$out/sync"
 cat > src/export.ts <<'EOF'
 import type { Transaction } from "./transactions"

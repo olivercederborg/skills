@@ -1,10 +1,10 @@
 ---
-name: ready-check
+name: verify-work
 description: Checks whether a branch, PR, or stack is actually done (scope, idiom, standards, slop, tests, verification, and PR description) and gives a done or not-done verdict, then fixes what the user approves. Use when asked if work is done, production-ready, idiomatic, or clean, or whether anything is left to improve.
 compatibility: Requires git. Uses gh for PR metadata when available.
 ---
 
-# Ready check
+# Verify work
 
 Answer "is this done?" with a verdict the user can trust, and a short list of what
 stands between the work and done. Work that is done gets a plain **Done**. A padded

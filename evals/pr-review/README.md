@@ -1,6 +1,6 @@
 # PR review skill evals
 
-Scenarios for `receiving-review` and `review-teammate-pr`. Each scenario is a small git
+Scenarios for `address-review` and `review-teammate-pr`. Each scenario is a small git
 repo plus a JSON file that stands in for the GitHub fetch. The prompts, the user's
 scripted replies, and the pass/fail assertions are in [`evals.json`](evals.json).
 Rerun the evals after editing either skill or anything in `shared/`.

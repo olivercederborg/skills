@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Builds the ready-check eval repo in /tmp. Usage: ./setup.sh [target-dir]
+# Builds the verify-work eval repo in /tmp. Usage: ./setup.sh [target-dir]
 set -euo pipefail
-out="${1:-/tmp/ready-check-eval}"
+out="${1:-/tmp/verify-work-eval}"
 case "$out" in /tmp/*|/private/tmp/*) ;; *) echo "Refusing to write outside /tmp: $out" >&2; exit 1;; esac
 rm -rf "$out" && mkdir -p "$out/src" && cd "$out" && git init -q -b main
 commit() { git -c user.email=eval@example.com -c user.name=eval commit -qm "$1"; }
