@@ -8,7 +8,7 @@ scanning.
 
 ```text
 scope-grill       plan: decide by code impact, keep the MVP small, write "Not in scope"
-   build
+build             implement the plan in small, verified steps, inside its scope
 ready-check       is it done? scope (incl. Not in scope), idiom, standards, slop, tests
 review-loop       Claude + Codex review → fix → re-review until clean
 open-pr           open the PR with a visual description, or sync a stale one
@@ -22,6 +22,7 @@ coding-standards     used when writing or checking code: your TypeScript default
 | Skill | Use when |
 |---|---|
 | [`scope-grill`](scope-grill/) | Planning a change, or scoping an existing spec, ticket, or PR |
+| [`build`](build/) | Implementing an agreed plan, spec, or ticket |
 | [`ready-check`](ready-check/) | Asking "is this done?", "is it idiomatic?", or "anything left?" |
 | [`review-loop`](review-loop/) | Asking for a second opinion, or a review by Claude and Codex |
 | [`open-pr`](open-pr/) | Opening a PR, or checking whether a PR's title and description still match the code |

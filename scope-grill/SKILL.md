@@ -167,7 +167,7 @@ When every question is decided, finish with:
   **Not now**, in the format below.
 - **Size**: the estimated PR count and size.
 
-End with `**Next:** build · add Not in scope to <spec | ticket | PR> · done`. Offer an ADR only
+End with `**Next:** build · add Not in scope to <spec | ticket | PR> · done`. `build` implements the confirmed plan. Offer an ADR only
 when the user wants one.
 
 ## Not in scope
