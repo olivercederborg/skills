@@ -1,0 +1,4 @@
+interface:
+  display_name: "Coding standards"
+  short_description: "Apply Oliver's TypeScript engineering standards"
+  default_prompt: "Use $coding-standards to implement or review this TypeScript change."

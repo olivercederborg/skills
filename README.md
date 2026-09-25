@@ -16,6 +16,7 @@ receiving-review  handle reviewers' and bots' comments: verify, fix, reply, reso
 
 review-teammate-pr   review someone else's PR and post the comments you approve
 grounding            used by all of the above: check a claim against real evidence
+coding-standards     used when writing or checking code: your TypeScript defaults
 ```
 
 | Skill | Use when |
@@ -26,6 +27,7 @@ grounding            used by all of the above: check a claim against real eviden
 | [`open-pr`](open-pr/) | Opening a PR, or checking whether a PR's title and description still match the code |
 | [`receiving-review`](receiving-review/) | Handling review comments on your own PR or stack |
 | [`review-teammate-pr`](review-teammate-pr/) | Reviewing a teammate's PR |
+| [`coding-standards`](coding-standards/) | Implementing or reviewing TypeScript. `ready-check` applies it too |
 | [`grounding`](grounding/) | Verifying a technical claim, or asking "are you sure?" |
 
 ## How they fit together
@@ -46,6 +48,8 @@ grounding            used by all of the above: check a claim against real eviden
 Scenario evals live in [`evals/`](evals/). The review behind this design is in
 [`docs/research/`](docs/research/).
 
+`coding-standards` is adapted from dmmulroy's skill of the same name
+([dmmulroy/skills](https://github.com/dmmulroy/skills), MIT; see its `NOTICE`).
 `receiving-review` was inspired by Johan Frølich's original skill of the same name.
 `open-pr`'s default body is modeled on HumanLayer's `visual-pr` skill
 ([humanlayer/skills](https://github.com/humanlayer/skills)). `scope-grill` adapts the design-tree rounds from Matt Pocock's `grilling` skill
