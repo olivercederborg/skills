@@ -1,0 +1,6 @@
+interface:
+  display_name: "Open PR"
+  short_description: "Open a PR or sync a stale PR description"
+  default_prompt: "Use $open-pr to open or sync the PR for this branch."
+policy:
+  allow_implicit_invocation: true

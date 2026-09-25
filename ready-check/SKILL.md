@@ -134,7 +134,7 @@ Lead with the verdict, then the findings:
   design.
 - **Checks line**: one line showing each check's result.
 - **Done**: when the work is done, say so and list the scope checked. "Done" needs no
-  findings. End with `**Next:** review-loop · open PR`.
+  findings. End with `**Next:** review-loop · open-pr`.
 
 ## 4. Fix and re-check
 

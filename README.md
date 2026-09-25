@@ -11,7 +11,7 @@ scope-grill       plan: decide by code impact, keep the MVP small, write "Not in
    build
 ready-check       is it done? scope (incl. Not in scope), idiom, standards, slop, tests
 review-loop       Claude + Codex review → fix → re-review until clean
-   open PR
+open-pr           open the PR with a visual description, or sync a stale one
 receiving-review  handle reviewers' and bots' comments: verify, fix, reply, resolve
 
 review-teammate-pr   review someone else's PR and post the comments you approve
@@ -23,6 +23,7 @@ grounding            used by all of the above: check a claim against real eviden
 | [`scope-grill`](scope-grill/) | Planning a change, or scoping an existing spec, ticket, or PR |
 | [`ready-check`](ready-check/) | Asking "is this done?", "is it idiomatic?", or "anything left?" |
 | [`review-loop`](review-loop/) | Asking for a second opinion, or a review by Claude and Codex |
+| [`open-pr`](open-pr/) | Opening a PR, or checking whether a PR's title and description still match the code |
 | [`receiving-review`](receiving-review/) | Handling review comments on your own PR or stack |
 | [`review-teammate-pr`](review-teammate-pr/) | Reviewing a teammate's PR |
 | [`grounding`](grounding/) | Verifying a technical claim, or asking "are you sure?" |
@@ -46,7 +47,8 @@ Scenario evals live in [`evals/`](evals/). The review behind this design is in
 [`docs/research/`](docs/research/).
 
 `receiving-review` was inspired by Johan Frølich's original skill of the same name.
-`scope-grill` adapts the design-tree rounds from Matt Pocock's `grilling` skill
+`open-pr`'s default body is modeled on HumanLayer's `visual-pr` skill
+([humanlayer/skills](https://github.com/humanlayer/skills)). `scope-grill` adapts the design-tree rounds from Matt Pocock's `grilling` skill
 ([mattpocock/skills](https://github.com/mattpocock/skills)).
 
 ## Install
